@@ -1,0 +1,10 @@
+.container{
+    margin:auto;
+    width: 77em;
+}
+
+.row{
+    border: 1px solid;
+    display: block;
+}
+

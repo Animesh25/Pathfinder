@@ -1,0 +1,28 @@
+.node{
+    border: 1px solid;
+    width: 40px;
+    height: 40px;
+    display: table-cell;
+    background-color: thistle;
+}
+.wall{
+    border: 1px solid;
+    width: 40px;
+    height: 40px;
+    display: table-cell;
+    background-color:red;
+}
+.start{
+    border: 1px solid;
+    width: 40px;
+    height: 40px;
+    display: table-cell;
+    background-color:greenyellow;
+}
+.end{
+    border: 1px solid;
+    width: 40px;
+    height: 40px;
+    display: table-cell;
+    background-color:black;
+}
