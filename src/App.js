@@ -9,11 +9,11 @@ function App() {
   const [Grid, setGrid] = useState([]);
   const [mouseDown, setMouseDown] = useState(false);
   const [startLoc,setStartLoc]=useState([5,5]);
-  const [endLoc,setendLoc]=useState([5,15]);
+  const [endLoc,setEndLoc]=useState([5,15]);
   const [startDrag,setStartDrag]=useState(false);
+  const [endDrag,setEndDrag]=useState(false);
   useEffect(() => {
     setGrid(createGrid());
-   
   }, []);
 
   
@@ -45,6 +45,9 @@ function App() {
     console.log("start drag-------------startLoc0,startLoc1=",startLoc[0],",",startLoc[1]);
     if(x==startLoc[0] && y==startLoc[1]){
       setStartDrag(true);
+    }
+    else if(x==endLoc[0] && y==endLoc[1]){
+      setEndDrag(true);
     }
     else{
       // else setStartDrag(false);
@@ -96,6 +99,26 @@ function App() {
                     />;
         setStartLoc([x,y])
       }
+      else if(endDrag){
+          newGrid[x][y] =
+          <Node
+            key={y}
+            handleMouseDown={() => handleMouseDown(x, y)}
+            handleMouseEnter={() => handleMouseEnter(x, y)}
+            handleMouseUp={() => handleMouseUp(x,y)}
+            isStart={false}
+            isEnd={true}
+            isWall={false} />
+          newGrid[endLoc[0]][endLoc[1]] = <Node 
+                        isWall={false} 
+                        isStart={false} 
+                        isEnd={false}
+                        handleMouseDown={() => handleMouseDown(x,y)}
+                        handleMouseEnter={() => handleMouseEnter(x,y)}
+                        handleMouseUp={() => handleMouseUp(x,y)}
+                      />;
+          setEndLoc([x,y])
+      }
       setGrid(newGrid)
     }
 
@@ -107,7 +130,11 @@ function App() {
     if(startDrag){
       setStart(x,y) 
     }
+    else if(endDrag){
+      // setEnd(x,y);
+    }
     setStartDrag(false);
+    setEndDrag(false);
   }
 
   const findPath = () => {
@@ -126,7 +153,14 @@ function App() {
                       handleMouseEnter={() => handleMouseEnter(x,y)}
                       handleMouseUp={() => handleMouseUp(x,y)}
                     />;
-    newGrid[5][15] = <Node isWall={false} isStart={false} isEnd={true} />;    
+    newGrid[endLoc[0]][endLoc[1]] = <Node 
+                                  isWall={false} 
+                                  isStart={false} 
+                                  isEnd={true}
+                                  handleMouseDown={() => handleMouseDown(x,y)}
+                                  handleMouseEnter={() => handleMouseEnter(x,y)}
+                                  handleMouseUp={() => handleMouseUp(x,y)}
+                                />;
     setGrid(newGrid);
 
   }
