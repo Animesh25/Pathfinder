@@ -219,7 +219,6 @@ function App() {
     clear_visited_path();
     clear_old_path(gridPath);
     let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid);
-    await draw_path(closed_nodes, 1, "visited");
     find_path_from_closed(closed_nodes);
   }
   const find_path_from_closed = async (closed_nodes) => {
