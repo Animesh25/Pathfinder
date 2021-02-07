@@ -8,3 +8,30 @@
     display: block;
 }
 
+.buttonGroup{
+    margin: auto;
+    width: fit-content;
+}
+.button{
+    background-color: #e7e7e79f; color: black;
+    margin:1em;
+    border-radius: 1em;
+    padding: 0.35em;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+}
+.button:hover{
+    background-color: #dad8d89c; color: black;
+    cursor:pointer;
+    transition: 0.35s;
+}
+.keySet{
+    margin: auto;
+    width: fit-content;
+    margin-top: 2em;
+    display: flex;
+}
+
+.key{
+    margin: 1em;
+}
