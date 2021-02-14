@@ -22,26 +22,27 @@
     animation-fill-mode: forwards;
 }
 @keyframes create_animation{
-    0% {background-color:rgba(255, 0, 0, 0.37);background-size:5%;}
+    0% {background-color:rgba(206, 206, 206, 0.37);background-size:5%;}
     25% {background-size:25%;}
     75% {background-size:55%;}
     95% {background-size:75%;} 
-    100% {background-color:red;background-size:contain;}
+    100% {background-color:rgb(82, 82, 82);background-size:contain;}
 }
 
 .start{
+    background-image:url(start.svg);
     border: 1px solid;
     width: 40px;
     height: 40px;
     display: table-cell;
-    background-color:greenyellow;
+    /* background-color:greenyellow; */
 }
 .end{
     border: 1px solid;
     width: 40px;
     height: 40px;
     display: table-cell;
-    background-color:black;
+    background-image:url(end.svg);
 }
 .visited{
     border: 1px solid;

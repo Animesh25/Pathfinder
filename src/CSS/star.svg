@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="802" height="802">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="42" height="42">
 	<defs>
-		<image width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAAAXNSR0IB2cksfwAAAANQTFRF7QkJrl59xAAAAAxJREFUeJxjYBjcAAAAoAABsAZiGAAAAABJRU5ErkJggg=="/>
+		<image width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAAAXNSR0IB2cksfwAAAANQTFRFWVlZvdknqAAAAAxJREFUeJxjYBjcAAAAoAABsAZiGAAAAABJRU5ErkJggg=="/>
 	</defs>
 	<style>
 		tspan { white-space:pre }
