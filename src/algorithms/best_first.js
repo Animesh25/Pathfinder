@@ -9,7 +9,6 @@ export const best_first = (ROWS, COLS, startLoc, endLoc, Grid) => {
     let closed_nodes = [];
 
     while (open_nodes.length > 0 && open_nodes.length < 20000) {
-
         const node_lowest_cost = find_lowest_node(open_nodes, closed_nodes);
         if (node_lowest_cost === undefined) break;
 
