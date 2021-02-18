@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+
 import './CSS/grid.css';
 import Node from './Components/Node';
 import { findPath } from './algorithms/a_star_search';
@@ -7,6 +7,8 @@ import { dijkstra_algorithm } from './algorithms/dijkstra';
 import { bfs } from './algorithms/breadth_first';
 import { dfs } from './algorithms/depth_first';
 import { best_first } from './algorithms/best_first';
+import { timeout, find_path_from_closed, draw_path } from './Helpers/path_finder';
+import Dropdown from './Components/Dropdown';
 
 
 
@@ -20,6 +22,8 @@ function App() {
   const [endDrag, setEndDrag] = useState(false);
   const [gridPath, setPath] = useState([]);
   const [visitedPath, setVisited] = useState([]);
+  const [dropDownValue, setDropDownValue] = useState("");
+  
 
   useEffect(() => {
     setGrid(createGrid());
@@ -99,11 +103,20 @@ function App() {
     }
 
   }
+
+  //if moving start or end we want to retain previous wall position
+  /**
+   * oldGrid=grid
+   * if(start or end)
+   *    
+   */
   const handleMouseEnter = (x, y) => {
     if (x === null || y === null || x < 0 || y < 0) return;
+    if (x === endLoc[0] && y === endLoc[1]) return;
+    if (x === startLoc[0] && y === startLoc[1]) return;
     if (mouseDown) {
       let newGrid = Grid.slice();
-      if ((x != startLoc[0] && y != startLoc[1]) || (!newGrid[x][y].props.isStart && !newGrid[x][y].props.isEnd)) {
+      if (!startDrag && !endDrag) {
         newGrid[x][y] =
           <Node
             key={y}
@@ -123,9 +136,9 @@ function App() {
             handleMouseEnter={() => handleMouseEnter(x, y)}
             handleMouseUp={() => handleMouseUp(x, y)}
             isStart={true}
-            isWall={false} />
+            isWall={newGrid[x][y].props.isWall} />
         newGrid[startLoc[0]][startLoc[1]] = <Node
-          isWall={false}
+          isWall={newGrid[startLoc[0]][startLoc[1]].props.isWall}
           isStart={false}
           isEnd={false}
           isPath={false}
@@ -145,11 +158,11 @@ function App() {
             handleMouseUp={() => handleMouseUp(x, y)}
             isStart={false}
             isEnd={true}
-            isWall={false}
+            isWall={newGrid[x][y].props.isWall}
             isPath={false}
             isVisited={false} />
         newGrid[endLoc[0]][endLoc[1]] = <Node
-          isWall={false}
+          isWall={newGrid[endLoc[0]][endLoc[1]].props.isWall}
           isStart={false}
           isEnd={false}
           isPath={false}
@@ -158,7 +171,10 @@ function App() {
           handleMouseEnter={() => handleMouseEnter(x, y)}
           handleMouseUp={() => handleMouseUp(x, y)}
         />;
+        console.log("set wall at endloc=", endLoc);
         setEndLoc([x, y])
+
+        console.log("new endloc=", endLoc)
       }
       setGrid(newGrid)
     }
@@ -184,17 +200,17 @@ function App() {
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
-    await draw_path(closed_nodes, 1, "visited");
-    await find_path_from_closed(closed_nodes);
+    await draw_path_helper(closed_nodes, 1, "visited");
+    await find_path_from_closed_helper(closed_nodes);
   }
   const BFS = async () => {
     let closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid);
-    console.log("BFS closed=", closed_nodes);
+    // console.log("BFS closed=", closed_nodes);
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
-    await draw_path(closed_nodes, 1, "visited");
-    await find_path_from_closed(closed_nodes);
+    await draw_path_helper(closed_nodes, 1, "visited");
+    await find_path_from_closed_helper(closed_nodes);
   }
 
   const best_first_search = async () => {
@@ -202,42 +218,30 @@ function App() {
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
-    console.log("length=", closed_nodes.length);
-    await draw_path(closed_nodes, 1, "visited");
-    await find_path_from_closed(closed_nodes);
+    // console.log("length=", closed_nodes.length);
+    await draw_path_helper(closed_nodes, 1, "visited");
+    await find_path_from_closed_helper(closed_nodes);
   }
   const DFS = async () => {
     let closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid);
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
-    console.log("length=", closed_nodes.length);
-    await draw_path(closed_nodes, 1, "visited");
-    await draw_path(closed_nodes, 1, "path");
+    // console.log("length=", closed_nodes.length);
+    await draw_path_helper(closed_nodes, 1, "visited");
+    await draw_path_helper(closed_nodes, 1, "path");
   }
   const aStarSearch = () => {
     clear_visited_path();
     clear_old_path(gridPath);
     let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid);
-    find_path_from_closed(closed_nodes);
+    find_path_from_closed_helper(closed_nodes);
   }
-  const find_path_from_closed = async (closed_nodes) => {
-    let path = [];
-    let found_start = false;
-    let last = closed_nodes[closed_nodes.length - 1];
-    while (found_start === false) {
-      path.unshift(last);
-      if (last === undefined) break;
-      if (last[0] === startLoc[0] && last[1] === startLoc[1]) found_start = true;
-      else {
-        last = last[last.length - 1];
-      }
-    }
-
-
+  const find_path_from_closed_helper = async (closed_nodes) => {
+    let path = await find_path_from_closed(closed_nodes, startLoc);;
     setPath(path);
-    console.log("path==================", path);
-    await draw_path(path, 1, "path");
+    // console.log("path==================", path);
+    await draw_path_helper(path, 1, "path");
   }
   const clear_visited_path = () => {
     const newGrid = Grid.slice();
@@ -271,42 +275,18 @@ function App() {
     }
     setGrid(newGrid);
   }
-  function timeout(delay) {
-    return new Promise(res => setTimeout(res, delay));
-  }
-  const draw_path = async (path, i, type) => {
-    const newGrid = Grid.slice();
+
+
+  const draw_path_helper = async (path, i, type) => {
     if (i > 0 && i < path.length - 1) {
-      const x = path[i][0];
-      const y = path[i][1]
-      // console.log("node=", x, y);
-      // console.log(newGrid[x][y])
-      if (type === "visited") {
-        newGrid[x][y] = <Node
-          isWall={false}
-          isStart={Grid[x][y].props.isStart}
-          isEnd={Grid[x][y].props.isEnd}
-          isPath={false}
-          isVisited={true}
-        />;
-      }
-      else {
-        newGrid[x][y] = <Node
-          isWall={false}
-          isStart={Grid[x][y].props.isStart}
-          isEnd={Grid[x][y].props.isEnd}
-          isPath={true}
-          isVisited={false}
-        />;
-      }
-
+      let newGrid = await draw_path(Grid, path, i, type)
       setGrid(newGrid);
-      await timeout(10);
-      await draw_path(path, i + 1, type);
+      await timeout(5);
+      await draw_path_helper(path, i + 1, type);
     }
-
-
   }
+
+
 
 
 
@@ -355,17 +335,44 @@ function App() {
     }
     setGrid(grid);
   }
-
+  const options = [
+    'A* star', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search'
+  ];
+  const startAlgorithm=()=>{
+    if(dropDownValue==="A* star"){
+      aStarSearch()
+    }
+    else if(dropDownValue==="Dijkstra"){
+      dijkstra()
+    }
+    else if(dropDownValue==="Breadth-First Search"){
+      BFS()
+    }
+    else if(dropDownValue==="Depth-First Search"){
+      DFS()
+    }
+    else if(dropDownValue==="Best-First Search"){
+      best_first_search();
+    }
+  }
+  const defaultOption = options[0];
+  
+  
+  
   return (
     <div className="App">
       <div className="buttonGroup">
+        <Dropdown options={options} 
+          dropDownValueChanged={(value)=>setDropDownValue(value)} 
+        />
+
         <button className="button" onClick={() => clearWalls()}>Clear Walls</button>
-        <button className="button" onClick={() => setStart(startLoc[0], startLoc[1])}>set Start & End</button>
-        <button className="button" onClick={() => aStarSearch()}>A* search</button>
+        {/* <button className="button" onClick={() => aStarSearch()}>A* search</button>
         <button className="button" onClick={() => dijkstra()}>Dijkstra</button>
         <button className="button" onClick={() => BFS()}>BFS</button>
         <button className="button" onClick={() => DFS()}>DFS</button>
-        <button className="button" onClick={() => best_first_search()}>Best First Search</button>
+        <button className="button" onClick={() => best_first_search()}>Best First Search</button> */}
+        <button className="startButton" onClick={() =>startAlgorithm()}>Start {dropDownValue}</button>
       </div>
       <div className="container">
         {Grid.map((row, yIndex) => {

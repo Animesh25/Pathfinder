@@ -10,7 +10,10 @@
 
 .buttonGroup{
     margin: auto;
-    width: fit-content;
+    width: 50%;
+    background-color: antiquewhite;
+    margin-bottom: 5rem;
+    display: flex;
 }
 .button{
     background-color: #e7e7e79f; color: black;
@@ -19,6 +22,20 @@
     padding: 0.35em;
     padding-left: 0.8em;
     padding-right: 0.8em;
+}
+.startButton{
+    background-color: #a7e5ff9f; color: rgb(0, 0, 0);
+    margin:1em;
+    border-radius: 1em;
+    padding: 0.55em;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+    font-weight: bold;
+}
+.startButton:hover{
+    background-color: #04acee9f;
+    cursor:pointer;
+    transition: 0.35s;
 }
 .button:hover{
     background-color: #dad8d89c; color: black;

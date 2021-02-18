@@ -22,7 +22,13 @@ function Node(props) {
 
 
   let className = "node";
-  if (isWall === true) {
+  if (isEnd === true) {
+    className = "end";
+  }
+  else if (isStart === true) {
+    className = "start";
+  }
+  else if (isWall === true) {
     className = "wall";
   }
   else if (isVisited === true) {
@@ -30,12 +36,6 @@ function Node(props) {
   }
   else if (isPath === true) {
     className = "path";
-  }
-  else if (isStart === true) {
-    className = "start";
-  }
-  else if (isEnd === true) {
-    className = "end";
   }
   else {
     className = "node";

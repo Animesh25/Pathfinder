@@ -3,7 +3,7 @@
 export const findPath = (ROWS, COLS, startLoc, endLoc, Grid) => {
 
 
-    console.log("rows=",ROWS," cols=",COLS," startLoc=",startLoc,"  endloc=",endLoc,"  grid=",Grid);
+    // console.log("rows=",ROWS," cols=",COLS," startLoc=",startLoc,"  endloc=",endLoc,"  grid=",Grid);
 
     let open_nodes = [[startLoc[0], startLoc[1], 0, 0, 0]];
     let closed_nodes = [];
@@ -18,7 +18,7 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid) => {
 
 
         let neighbours = getNeighbours(node_lowest_cost,ROWS,COLS);
-        console.log("neighbours================",neighbours);
+        // console.log("neighbours================",neighbours);
         for (let i = 0; i < neighbours.length; i++) {
             const neighbour = neighbours[i];
             let g_score, h_score, f_score = 0;
@@ -64,30 +64,21 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid) => {
         }
         if (closed_nodes.length > 0) {
             const last_closed = closed_nodes[closed_nodes.length - 1];
-            if (last_closed[0] === endLoc[0] && last_closed[1] === endLoc[1]) {
+            if (last_closed[0] === endLoc[0] && last_closed[1] === endLoc[1]) {       
                 break;
             }
         }
-
         if (!contains(closed_nodes, node_lowest_cost)) {
             closed_nodes.push(node_lowest_cost);
         }
-
-        // remove(open_nodes, node_lowest_cost);
-        // console.log("dn=", open_nodes);
-
-
-        // break
     }
-    // console.log("path=", closed_nodes);
-
     return closed_nodes;
 
 }
 
  const getNeighbours = (node,ROWS,COLS) => {
     // node=node.value
-    console.log("row in get neigbours=",ROWS);
+    // console.log("row in get neigbours=",ROWS);
     let neighbours = [];
     // console.log("niehgbours func node=",node.value)
     if (node[0] > 0) {
@@ -124,7 +115,7 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid) => {
     return ((x * x) + (y * y))
 }
  const distance_from_end = (node,endLoc) => {
-     console.log("distance end====================================",node,"  endLoc=",endLoc);
+    //  console.log("distance end====================================",node,"  endLoc=",endLoc);
     const x = Math.abs(node[0] - endLoc[0]);
     const y = Math.abs(node[1] - endLoc[1]);
     return ((x * x) + (y * y))

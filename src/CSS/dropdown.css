@@ -1,0 +1,31 @@
+.dropdownContainer{
+    background-color: #e9e5e5;
+    width: 10rem;
+    /* height: 2.5rem; */
+    margin: auto;
+}
+.dropdown{
+    background-color: #e9e5e5;
+    width: 10rem;
+    height: 2.5rem;
+    margin: auto;
+}
+.value{
+    text-align: center;
+    padding: 0.5em;
+}
+.subMenu{
+    background-color:#ddd7d7;
+    width: 10rem;
+    position: absolute;
+}
+.item{
+    background-color: #f7f3f3(7, 211, 211);
+    text-align: center;
+    margin: 1%;
+    padding: 0.5em;
+}
+.item:hover{
+    background-color:aliceblue;
+    cursor: pointer;
+}

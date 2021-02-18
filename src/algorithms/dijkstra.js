@@ -51,7 +51,7 @@ export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid) => {
             if (neighbour[0] === endLoc[0] && neighbour[1] === endLoc[1]) {
                 visited.push(node_lowest_cost);
                 visited.push([neighbour[0], neighbour[1], cost, node_lowest_cost]);
-                console.log("end found");
+                // console.log("end found");
                 return visited;
             }
             update_cost(neighbour, cost, node_lowest_cost, unvisited);
@@ -59,8 +59,8 @@ export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid) => {
         }
         unvisited = remove_from_unvisited(node_lowest_cost, unvisited);
         visited.push(node_lowest_cost);
-        console.log("visited=" + visited);
-        console.log("not visited=" + unvisited);
+        // console.log("visited=" + visited);
+        // console.log("not visited=" + unvisited);
 
 
     }
@@ -95,7 +95,7 @@ const remove_from_unvisited = (node, unvisited) => {
 
 const getNeighbours = (node, visited, ROWS, COLS) => {
     // node=node.value
-    console.log("row in get neigbours=", ROWS);
+    // console.log("row in get neigbours=", ROWS);
     let neighbours = [];
     // console.log("niehgbours func node=",node.value)
     if (node[0] > 0) {
@@ -132,7 +132,7 @@ const distance_from_start = (node, startLoc) => {
     return ((x * x) + (y * y))
 }
 const distance_from_end = (node, endLoc) => {
-    console.log("distance end====================================", node, "  endLoc=", endLoc);
+    // console.log("distance end====================================", node, "  endLoc=", endLoc);
     const x = Math.abs(node[0] - endLoc[0]);
     const y = Math.abs(node[1] - endLoc[1]);
     return ((x * x) + (y * y))
