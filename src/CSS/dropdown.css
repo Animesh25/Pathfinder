@@ -1,23 +1,30 @@
 .dropdownContainer{
     background-color: #e9e5e5;
     width: 10rem;
-    /* height: 2.5rem; */
-    margin: auto;
+    height:2.1em;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 1.5em;
+    border-radius: 25px;
 }
 .dropdown{
-    background-color: #e9e5e5;
     width: 10rem;
-    height: 2.5rem;
     margin: auto;
 }
 .value{
     text-align: center;
-    padding: 0.5em;
+    margin-bottom: auto;
+    margin-top: auto;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 2.1em;
 }
 .subMenu{
     background-color:#ddd7d7;
     width: 10rem;
     position: absolute;
+    border-radius: 25px;
 }
 .item{
     background-color: #f7f3f3(7, 211, 211);

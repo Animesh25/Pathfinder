@@ -1,6 +1,6 @@
 .container{
     margin:auto;
-    width: 77em;
+    width: 90em;
 }
 
 .row{
@@ -10,13 +10,17 @@
 
 .buttonGroup{
     margin: auto;
-    width: 50%;
-    background-color: antiquewhite;
+    width: 100%;
+    background-color: #565656;
     margin-bottom: 5rem;
     display: flex;
+    margin-bottom: 1em;
+    justify-content: center;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 }
 .button{
-    background-color: #e7e7e79f; color: black;
+    background-color: #e7e7e7; color: black;
     margin:1em;
     border-radius: 1em;
     padding: 0.35em;
@@ -24,7 +28,7 @@
     padding-right: 0.8em;
 }
 .startButton{
-    background-color: #a7e5ff9f; color: rgb(0, 0, 0);
+    background-color: #a7e5ff; color: rgb(0, 0, 0);
     margin:1em;
     border-radius: 1em;
     padding: 0.55em;
@@ -33,7 +37,7 @@
     font-weight: bold;
 }
 .startButton:hover{
-    background-color: #04acee9f;
+    background-color: #93dcfc;
     cursor:pointer;
     transition: 0.35s;
 }

@@ -22,7 +22,8 @@ function App() {
   const [endDrag, setEndDrag] = useState(false);
   const [gridPath, setPath] = useState([]);
   const [visitedPath, setVisited] = useState([]);
-  const [dropDownValue, setDropDownValue] = useState("");
+  const [chosenAlgorithm, setAlgorithm] = useState("");
+  const [chosenDirection, setDirection] = useState("");
   
 
   useEffect(() => {
@@ -31,7 +32,7 @@ function App() {
   }, []);
 
   const ROWS = 15;
-  const COLS = 30;
+  const COLS = 45;
 
   const createGrid = () => {
 
@@ -195,7 +196,7 @@ function App() {
     setEndDrag(false);
   }
   const dijkstra = async () => {
-    let closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, Grid);
+    let closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
 
     clear_visited_path();
     clear_old_path(gridPath);
@@ -204,7 +205,7 @@ function App() {
     await find_path_from_closed_helper(closed_nodes);
   }
   const BFS = async () => {
-    let closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid);
+    let closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
     // console.log("BFS closed=", closed_nodes);
     clear_visited_path();
     clear_old_path(gridPath);
@@ -214,7 +215,7 @@ function App() {
   }
 
   const best_first_search = async () => {
-    let closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid);
+    let closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
@@ -223,7 +224,7 @@ function App() {
     await find_path_from_closed_helper(closed_nodes);
   }
   const DFS = async () => {
-    let closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid);
+    let closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
@@ -234,13 +235,13 @@ function App() {
   const aStarSearch = () => {
     clear_visited_path();
     clear_old_path(gridPath);
-    let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid);
+    let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
     find_path_from_closed_helper(closed_nodes);
   }
   const find_path_from_closed_helper = async (closed_nodes) => {
     let path = await find_path_from_closed(closed_nodes, startLoc);;
     setPath(path);
-    // console.log("path==================", path);
+    console.log("path==================", path);
     await draw_path_helper(path, 1, "path");
   }
   const clear_visited_path = () => {
@@ -335,44 +336,50 @@ function App() {
     }
     setGrid(grid);
   }
-  const options = [
+  const algorithmOptions = [
     'A* star', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search'
   ];
+  const directionOptions=[
+    '4-Directional','6-Directional'
+  ]
   const startAlgorithm=()=>{
-    if(dropDownValue==="A* star"){
+    if(chosenAlgorithm==="A* star"){
       aStarSearch()
     }
-    else if(dropDownValue==="Dijkstra"){
+    else if(chosenAlgorithm==="Dijkstra"){
       dijkstra()
     }
-    else if(dropDownValue==="Breadth-First Search"){
+    else if(chosenAlgorithm==="Breadth-First Search"){
       BFS()
     }
-    else if(dropDownValue==="Depth-First Search"){
+    else if(chosenAlgorithm==="Depth-First Search"){
       DFS()
     }
-    else if(dropDownValue==="Best-First Search"){
+    else if(chosenAlgorithm==="Best-First Search"){
       best_first_search();
     }
   }
-  const defaultOption = options[0];
+  
   
   
   
   return (
     <div className="App">
       <div className="buttonGroup">
-        <Dropdown options={options} 
-          dropDownValueChanged={(value)=>setDropDownValue(value)} 
+        <Dropdown options={algorithmOptions} default={"Search Algorithm"}
+          dropDownValueChanged={(value)=>setAlgorithm(value)} 
         />
-
+        <button className="startButton" onClick={() =>startAlgorithm()}>Start {chosenAlgorithm}</button>
         <button className="button" onClick={() => clearWalls()}>Clear Walls</button>
+        <Dropdown options={directionOptions} default={"6-Directional"}
+          dropDownValueChanged={(value)=>setDirection(value)} 
+        />
         {/* <button className="button" onClick={() => aStarSearch()}>A* search</button>
         <button className="button" onClick={() => dijkstra()}>Dijkstra</button>
         <button className="button" onClick={() => BFS()}>BFS</button>
         <button className="button" onClick={() => DFS()}>DFS</button>
         <button className="button" onClick={() => best_first_search()}>Best First Search</button> */}
-        <button className="startButton" onClick={() =>startAlgorithm()}>Start {dropDownValue}</button>
+        
       </div>
       <div className="container">
         {Grid.map((row, yIndex) => {

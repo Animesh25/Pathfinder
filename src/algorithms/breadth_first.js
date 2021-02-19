@@ -1,6 +1,7 @@
+import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
 
 
-export const bfs = (ROWS, COLS, startLoc, endLoc, Grid) => {
+export const bfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
 
     /*
@@ -33,7 +34,15 @@ export const bfs = (ROWS, COLS, startLoc, endLoc, Grid) => {
         const head = queue[0];
 
         if (head === undefined) { console.log("head=undefined so break"); break; }
-        let neighbours = getNeighbours(head, ROWS, COLS);
+
+        let neighbours;
+        if(chosenDirection.indexOf("4")>-1){
+            neighbours= getFourNeighbours(head, ROWS, COLS);
+        }
+        else{
+            neighbours= getSixNeighbours(head, ROWS, COLS);
+        }
+
         for (let i = 0; i < neighbours.length; i++) {
             const neighbour = neighbours[i];
             
@@ -63,76 +72,9 @@ export const bfs = (ROWS, COLS, startLoc, endLoc, Grid) => {
 
 
 }
-const update_cost = (node, cost, previous, unvisited) => {
-    let found = false;
-    for (let i = 0; i < unvisited.length; i++) {
-        let current = unvisited[i];
-        if (current[0] == node[0] && current[1] == node[1]) {
-            found = true;
-            if (unvisited[2] > cost) {
-                unvisited[2] = cost;
-                unvisited[3] = previous;
-                return unvisited;
-            }
-        }
-    }
-    if (!found) unvisited.push([node[0], node[1], cost, previous]);
-    return unvisited;
-}
-const remove_from_unvisited = (node, unvisited) => {
 
-    for (let i = 0; i < unvisited.length; i++) {
-        let current = unvisited[i];
-        if (current[0] == node[0] && current[1] == node[1]) unvisited.splice(i, 1);
-    }
-    return unvisited;
-}
 
-const getNeighbours = (node, ROWS, COLS) => {
-    // node=node.value
-    console.log("row in get neigbours=", ROWS);
-    let neighbours = [];
-    // console.log("niehgbours func node=",node.value)
-    if (node[0] > 0) {
-        neighbours.push([node[0] - 1, node[1]]);
-        if (node[1] > 0) {
-            neighbours.push([node[0] - 1, node[1] - 1]);
-        }
-    }
-    if (node[1] > 0) {
-        neighbours.push([node[0], node[1] - 1]);
-        if (node[0] < ROWS - 1) {
-            neighbours.push([node[0] + 1, node[1] - 1]);
-        }
-    }
-    if (node[0] < ROWS - 1) {
-        neighbours.push([node[0] + 1, node[1]]);
-        if (node[1] < COLS - 1) {
-            neighbours.push([node[0] + 1, node[1] + 1]);
-        }
-    }
-    if (node[1] < COLS - 1) {
-        neighbours.push([node[0], node[1] + 1]);
-        if (node[0] > 0) {
-            neighbours.push([node[0] - 1, node[1] + 1]);
-        }
-    }
 
-    return neighbours;
-
-}
-const distance_from_start = (node, startLoc) => {
-    const x = Math.abs(node[0] - startLoc[0]);
-    const y = Math.abs(node[1] - startLoc[1]);
-    return ((x * x) + (y * y))
-}
-const distance_from_end = (node, endLoc) => {
-    console.log("distance end====================================", node, "  endLoc=", endLoc);
-    const x = Math.abs(node[0] - endLoc[0]);
-    const y = Math.abs(node[1] - endLoc[1]);
-    return ((x * x) + (y * y))
-
-}
 
 
 const contains = (discovered_nodes, node) => {
@@ -144,25 +86,5 @@ const contains = (discovered_nodes, node) => {
     return false;
 }
 
-const remove = (list, node) => {
-    for (let i = 0; i < list.length; i++) {
-        if (list[i][0] === node[0] && list[i][1] === node[1]) {
-            return list.splice(i, 1);
-        }
-    }
-}
-const find_lowest_node = (unvisted) => {
 
-    // console.log("find lowest slice=", copy);
-    let min_cost = 10000000;
-    let node;
-    for (let i = 0; i < unvisted.length; i++) {
-        if (unvisted[i][2] < min_cost) {
-            min_cost = unvisted[i][2];
-            node = unvisted[i];
-        }
-
-    }
-    return node;
-}
 

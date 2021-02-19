@@ -8,7 +8,7 @@ function Dropdown(props) {
 
     const [options, setOptions] = useState([]);
     const [hovered, setHover] = useState(false);
-    const [mainValue, setMainValue] = useState("Search Algorithm");
+    const [mainValue, setMainValue] = useState(props.default);
 
     let menuOptions=[];
     for(const value of options){

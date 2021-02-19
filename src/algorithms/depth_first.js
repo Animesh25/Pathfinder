@@ -1,6 +1,7 @@
+import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
 
 
-export const dfs = (ROWS, COLS, startLoc, endLoc, Grid) => {
+export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
 
     /*
@@ -35,7 +36,16 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid) => {
         removed.push(head);
         stack.splice(stack.length-1,1);
         if (head === undefined) { console.log("head=undefined so break"); break; }
-        let neighbours = getNeighbours(head, ROWS, COLS);
+
+        let neighbours;
+
+        if(chosenDirection.indexOf("4")>-1){
+            neighbours= getFourNeighbours(head, ROWS, COLS);
+        }
+        else{
+            neighbours= getSixNeighbours(head, ROWS, COLS);
+        }
+        
         for (let i = 0; i < neighbours.length; i++) {
             const neighbour = neighbours[i];
             //if node already in stack, then remove it and push it to the back

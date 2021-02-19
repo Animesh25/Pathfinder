@@ -1,6 +1,7 @@
 
+import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
 
-export const findPath = (ROWS, COLS, startLoc, endLoc, Grid) => {
+export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
 
     // console.log("rows=",ROWS," cols=",COLS," startLoc=",startLoc,"  endloc=",endLoc,"  grid=",Grid);
@@ -16,8 +17,13 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid) => {
         // console.log("lowest=", node_lowest_cost);
         // console.log("chosen from", open_nodes);
 
-
-        let neighbours = getNeighbours(node_lowest_cost,ROWS,COLS);
+        let neighbours;
+        if(chosenDirection.indexOf("4")>-1){
+            neighbours= getFourNeighbours(node_lowest_cost, ROWS, COLS);
+        }
+        else{
+            neighbours= getSixNeighbours(node_lowest_cost, ROWS, COLS);
+        }
         // console.log("neighbours================",neighbours);
         for (let i = 0; i < neighbours.length; i++) {
             const neighbour = neighbours[i];

@@ -1,6 +1,6 @@
+import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
 
-
-export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid) => {
+export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
 
     /*
@@ -34,9 +34,19 @@ export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid) => {
     while (unvisited.length > 0 && unvisited.length < 20000) {
 
         const node_lowest_cost = find_lowest_node(unvisited);
-
+        
+        let neighbours;
         if (node_lowest_cost === undefined) { console.log("node_lowest=undefined so break"); break; }
-        let neighbours = getNeighbours(node_lowest_cost, visited, ROWS, COLS);
+        
+        if(chosenDirection.indexOf("4")>-1){
+            neighbours= getFourNeighbours(node_lowest_cost, ROWS, COLS);
+        }
+        else{
+            neighbours= getSixNeighbours(node_lowest_cost, ROWS, COLS);
+        }
+        
+        
+        
         for (let i = 0; i < neighbours.length; i++) {
             const neighbour = neighbours[i];
             
@@ -93,39 +103,11 @@ const remove_from_unvisited = (node, unvisited) => {
     return unvisited;
 }
 
-const getNeighbours = (node, visited, ROWS, COLS) => {
-    // node=node.value
-    // console.log("row in get neigbours=", ROWS);
-    let neighbours = [];
-    // console.log("niehgbours func node=",node.value)
-    if (node[0] > 0) {
-        neighbours.push([node[0] - 1, node[1]]);
-        if (node[1] > 0) {
-            neighbours.push([node[0] - 1, node[1] - 1]);
-        }
-    }
-    if (node[1] > 0) {
-        neighbours.push([node[0], node[1] - 1]);
-        if (node[0] < ROWS - 1) {
-            neighbours.push([node[0] + 1, node[1] - 1]);
-        }
-    }
-    if (node[0] < ROWS - 1) {
-        neighbours.push([node[0] + 1, node[1]]);
-        if (node[1] < COLS - 1) {
-            neighbours.push([node[0] + 1, node[1] + 1]);
-        }
-    }
-    if (node[1] < COLS - 1) {
-        neighbours.push([node[0], node[1] + 1]);
-        if (node[0] > 0) {
-            neighbours.push([node[0] - 1, node[1] + 1]);
-        }
-    }
 
-    return neighbours;
 
-}
+
+
+
 const distance_from_start = (node, startLoc) => {
     const x = Math.abs(node[0] - startLoc[0]);
     const y = Math.abs(node[1] - startLoc[1]);

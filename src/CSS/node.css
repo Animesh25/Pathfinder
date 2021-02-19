@@ -1,7 +1,7 @@
 .node{
     border: 1px solid;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: table-cell;
     background-color: whitesmoke;
 }
@@ -12,8 +12,8 @@
     background-repeat: no-repeat;
     
     
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: table-cell;
     /* background-color:red; */
     animation-name: create_animation;
@@ -32,22 +32,22 @@
 .start{
     background-image:url(start.svg);
     border: 1px solid;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: table-cell;
     /* background-color:greenyellow; */
 }
 .end{
     border: 1px solid;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: table-cell;
     background-image:url(end.svg);
 }
 .visited{
     border: 1px solid;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: table-cell;
      background-color:khaki; 
     animation-name: path_animation;
@@ -62,8 +62,8 @@
 .path{
    
     border: 1px solid;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: table-cell;
      background-color:lightskyblue; 
     animation-name: path_animation;
