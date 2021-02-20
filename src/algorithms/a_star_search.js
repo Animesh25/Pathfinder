@@ -4,7 +4,7 @@ import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
 export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
 
-    // console.log("rows=",ROWS," cols=",COLS," startLoc=",startLoc,"  endloc=",endLoc,"  grid=",Grid);
+    console.log("rows=",ROWS," cols=",COLS," startLoc=",startLoc,"  endloc=",endLoc,"  grid=",Grid);
 
     let open_nodes = [[startLoc[0], startLoc[1], 0, 0, 0]];
     let closed_nodes = [];
@@ -29,7 +29,7 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => 
             const neighbour = neighbours[i];
             let g_score, h_score, f_score = 0;
 
-            if (Grid[neighbour[0]][neighbour[1]].props.isWall) {
+            if (Grid[neighbour[0]][neighbour[1]].props.isWall && !Grid[neighbour[0]][neighbour[1]].props.isEnd) {
                 continue;
                 // console.log("isWall")
                 // g_score = 10000;
@@ -46,7 +46,7 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => 
             if (neighbour[0] === endLoc[0] && neighbour[1] === endLoc[1]) {
                 closed_nodes.push(node_lowest_cost);
                 closed_nodes.push([neighbour[0], neighbour[1], f_score, h_score, g_score, node_lowest_cost]);
-                // console.log("end found");
+                console.log("end found at:",endLoc);
                 break;
             }
 

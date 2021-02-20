@@ -49,10 +49,12 @@
 .keySet{
     margin: auto;
     width: fit-content;
-    margin-top: 2em;
+    margin-top: 0.5em;
     display: flex;
 }
 
 .key{
     margin: 1em;
+    display: grid;
+    text-align: center;
 }

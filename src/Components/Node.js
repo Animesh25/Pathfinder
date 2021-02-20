@@ -12,7 +12,7 @@ function Node(props) {
     setEnd(props.isEnd)
     setPath(props.isPath)
     setVisited(props.isVisited)
-  }, [props.isWall, props.isStart, props.isEnd,props.isPath,props.isVisited])
+  }, [props.isWall, props.isStart, props.isEnd, props.isPath, props.isVisited])
 
   const [isWall, setWall] = useState(false);
   const [isStart, setStart] = useState(false);
@@ -41,12 +41,19 @@ function Node(props) {
     className = "node";
   }
 
-  return (
-    <div
+  let mainBody=<div className={className} />;
+  if (props.handleMouseEnter === undefined) {
+    mainBody = <div className={className} />
+  }
+  else {
+    mainBody = <div
       onMouseDown={() => props.handleMouseDown(x, y)}
       onMouseEnter={() => props.handleMouseEnter(x, y)}
       onMouseUp={() => props.handleMouseUp()}
       className={className} />
+  }
+  return (
+    mainBody
   );
 }
 

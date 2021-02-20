@@ -9,6 +9,9 @@ import { dfs } from './algorithms/depth_first';
 import { best_first } from './algorithms/best_first';
 import { timeout, find_path_from_closed, draw_path } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
+import { verticalMaze, horizontalMaze } from './Helpers/maze_creation';
+import ColourCode from './Components/ColourCode';
+
 
 
 
@@ -24,7 +27,7 @@ function App() {
   const [visitedPath, setVisited] = useState([]);
   const [chosenAlgorithm, setAlgorithm] = useState("");
   const [chosenDirection, setDirection] = useState("");
-  
+
 
   useEffect(() => {
     setGrid(createGrid());
@@ -175,7 +178,7 @@ function App() {
         console.log("set wall at endloc=", endLoc);
         setEndLoc([x, y])
 
-        console.log("new endloc=", endLoc)
+
       }
       setGrid(newGrid)
     }
@@ -196,7 +199,7 @@ function App() {
     setEndDrag(false);
   }
   const dijkstra = async () => {
-    let closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
+    let closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
 
     clear_visited_path();
     clear_old_path(gridPath);
@@ -205,7 +208,7 @@ function App() {
     await find_path_from_closed_helper(closed_nodes);
   }
   const BFS = async () => {
-    let closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
+    let closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     // console.log("BFS closed=", closed_nodes);
     clear_visited_path();
     clear_old_path(gridPath);
@@ -215,7 +218,7 @@ function App() {
   }
 
   const best_first_search = async () => {
-    let closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
+    let closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
@@ -224,7 +227,7 @@ function App() {
     await find_path_from_closed_helper(closed_nodes);
   }
   const DFS = async () => {
-    let closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
+    let closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
@@ -235,7 +238,7 @@ function App() {
   const aStarSearch = () => {
     clear_visited_path();
     clear_old_path(gridPath);
-    let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid,chosenDirection);
+    let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     find_path_from_closed_helper(closed_nodes);
   }
   const find_path_from_closed_helper = async (closed_nodes) => {
@@ -339,47 +342,49 @@ function App() {
   const algorithmOptions = [
     'A* star', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search'
   ];
-  const directionOptions=[
-    '4-Directional','6-Directional'
+  const directionOptions = [
+    '4-Directional', '6-Directional'
   ]
-  const startAlgorithm=()=>{
-    if(chosenAlgorithm==="A* star"){
+  const startAlgorithm = () => {
+    if (chosenAlgorithm === "A* star") {
       aStarSearch()
     }
-    else if(chosenAlgorithm==="Dijkstra"){
+    else if (chosenAlgorithm === "Dijkstra") {
       dijkstra()
     }
-    else if(chosenAlgorithm==="Breadth-First Search"){
+    else if (chosenAlgorithm === "Breadth-First Search") {
       BFS()
     }
-    else if(chosenAlgorithm==="Depth-First Search"){
+    else if (chosenAlgorithm === "Depth-First Search") {
       DFS()
     }
-    else if(chosenAlgorithm==="Best-First Search"){
+    else if (chosenAlgorithm === "Best-First Search") {
       best_first_search();
     }
   }
-  
-  
-  
-  
+
+
+
+
   return (
     <div className="App">
       <div className="buttonGroup">
         <Dropdown options={algorithmOptions} default={"Search Algorithm"}
-          dropDownValueChanged={(value)=>setAlgorithm(value)} 
+          dropDownValueChanged={(value) => setAlgorithm(value)}
         />
-        <button className="startButton" onClick={() =>startAlgorithm()}>Start {chosenAlgorithm}</button>
+        <button className="startButton" onClick={() => startAlgorithm()}>Start {chosenAlgorithm}</button>
         <button className="button" onClick={() => clearWalls()}>Clear Walls</button>
         <Dropdown options={directionOptions} default={"6-Directional"}
-          dropDownValueChanged={(value)=>setDirection(value)} 
+          dropDownValueChanged={(value) => setDirection(value)}
         />
+        <button className="button" onClick={() => setGrid(horizontalMaze(startLoc, endLoc, Grid.slice()))}>horizontalMaze</button>
+        <button className="button" onClick={() => setGrid(verticalMaze(startLoc, endLoc, Grid.slice()))}>verticalMaze</button>
         {/* <button className="button" onClick={() => aStarSearch()}>A* search</button>
         <button className="button" onClick={() => dijkstra()}>Dijkstra</button>
         <button className="button" onClick={() => BFS()}>BFS</button>
         <button className="button" onClick={() => DFS()}>DFS</button>
         <button className="button" onClick={() => best_first_search()}>Best First Search</button> */}
-        
+
       </div>
       <div className="container">
         {Grid.map((row, yIndex) => {
@@ -405,80 +410,8 @@ function App() {
           )
 
         })}
+        <ColourCode />
 
-        <div className="keySet">
-          <div className="key">
-            <Node
-              key={-1}
-              isWall={true}
-              isEnd={false}
-              isPath={false}
-              isVisited={false}
-              isStart={false}
-              handleMouseDown={() => handleMouseDown(-1, -1)}
-              handleMouseEnter={() => handleMouseEnter(-1, -1)}
-              handleMouseUp={() => handleMouseUp(-1, -1)}
-            />
-            <h3>Wall</h3>
-          </div>
-          <div className="key">
-            <Node
-              key={-1}
-              isWall={false}
-              isEnd={false}
-              isPath={false}
-              isVisited={false}
-              isStart={true}
-              handleMouseDown={() => handleMouseDown(-1, -1)}
-              handleMouseEnter={() => handleMouseEnter(-1, -1)}
-              handleMouseUp={() => handleMouseUp(-1, -1)}
-            />
-            <h3>Start</h3>
-          </div>
-          <div className="key">
-            <Node
-              key={-1}
-              isWall={false}
-              isEnd={true}
-              isPath={false}
-              isVisited={false}
-              isStart={false}
-              handleMouseDown={() => handleMouseDown(-1, -1)}
-              handleMouseEnter={() => handleMouseEnter(-1, -1)}
-              handleMouseUp={() => handleMouseUp(-1, -1)}
-            />
-            <h3>End</h3>
-          </div>
-          <div className="key">
-            <Node
-              key={-1}
-              isWall={false}
-              isEnd={false}
-              isPath={false}
-              isVisited={true}
-              isStart={false}
-              handleMouseDown={() => handleMouseDown(-1, -1)}
-              handleMouseEnter={() => handleMouseEnter(-1, -1)}
-              handleMouseUp={() => handleMouseUp(-1, -1)}
-            />
-            <h3>Visited</h3>
-          </div>
-          <div className="key">
-            <Node
-              key={-1}
-              isWall={false}
-              isEnd={false}
-              isPath={true}
-              isVisited={false}
-              isStart={false}
-              handleMouseDown={() => handleMouseDown(-1, -1)}
-              handleMouseEnter={() => handleMouseEnter(-1, -1)}
-              handleMouseUp={() => handleMouseUp(-1, -1)}
-            />
-            <h3>Path</h3>
-          </div>
-
-        </div>
       </div>
     </div>
   );

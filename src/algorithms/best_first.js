@@ -30,7 +30,7 @@ export const best_first = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) =
             const neighbour = neighbours[i];
             let h_score= 0;
 
-            if (Grid[neighbour[0]][neighbour[1]].props.isWall) {
+            if (Grid[neighbour[0]][neighbour[1]].props.isWall && !Grid[neighbour[0]][neighbour[1]].props.isEnd) {
                 continue;
             }
             else {

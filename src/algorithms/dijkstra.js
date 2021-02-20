@@ -52,7 +52,7 @@ export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid,chosenDire
             
             if (contains(visited, neighbour)) continue;
             let cost = 0;
-            if (Grid[neighbour[0]][neighbour[1]].props.isWall) {
+            if (Grid[neighbour[0]][neighbour[1]].props.isWall && !Grid[neighbour[0]][neighbour[1]].props.isEnd) {
                 continue
             }
             else {

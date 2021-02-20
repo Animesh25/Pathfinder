@@ -51,7 +51,7 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
             //if node already in stack, then remove it and push it to the back
             if (contains(removed,neighbour)) continue;
             let cost = 0;
-            if (Grid[neighbour[0]][neighbour[1]].props.isWall) {
+            if (Grid[neighbour[0]][neighbour[1]].props.isWall && !Grid[neighbour[0]][neighbour[1]].props.isEnd) {
                 continue
             }
             else {

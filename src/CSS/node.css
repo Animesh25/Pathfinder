@@ -4,6 +4,7 @@
     height: 30px;
     display: table-cell;
     background-color: whitesmoke;
+    margin: 1em 1em 0 1em;
 }
 .wall{
     background-image:url(star.svg);
@@ -20,6 +21,7 @@
     animation-duration: 0.2s;
     animation-timing-function: ease-in;
     animation-fill-mode: forwards;
+    margin: 1em 1em 0 1em;
 }
 @keyframes create_animation{
     0% {background-color:rgba(206, 206, 206, 0.37);background-size:5%;}
@@ -36,6 +38,7 @@
     height: 30px;
     display: table-cell;
     /* background-color:greenyellow; */
+    margin: 1em 1em 0 1em;
 }
 .end{
     border: 1px solid;
@@ -43,6 +46,7 @@
     height: 30px;
     display: table-cell;
     background-image:url(end.svg);
+    margin: 1em 1em 0 1em;
 }
 .visited{
     border: 1px solid;
@@ -52,6 +56,7 @@
      background-color:khaki; 
     animation-name: path_animation;
     animation-duration: 0.1s;
+    margin: 1em 1em 0 1em;
 }
 @keyframes visit_animation{
     0% {background-color:whitesmoke;}
@@ -68,6 +73,7 @@
      background-color:lightskyblue; 
     animation-name: path_animation;
     animation-duration: 0.1s;
+    margin: 1em 1em 0 1em;
 }
 @keyframes path_animation{
     0% {background-color: whitesmoke;}

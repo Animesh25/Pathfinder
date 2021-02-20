@@ -12,7 +12,7 @@ function Dropdown(props) {
 
     let menuOptions=[];
     for(const value of options){
-        menuOptions.push(<p onClick={()=>changeValue(value)} className={"item"}>{value}</p>)
+        menuOptions.push(<p key={value} onClick={()=>changeValue(value)} className={"item"}>{value}</p>)
     }
     
     const changeValue=(value)=>{
@@ -23,7 +23,7 @@ function Dropdown(props) {
     return (
         <div className={"dropdownContainer"}  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} >
             <div className={"dropdown"}>
-                <p className={"value"}>{mainValue}</p>
+                <p key={mainValue} className={"value"}>{mainValue}</p>
             </div>
             {hovered && (
                 <div className={"subMenu"}>
