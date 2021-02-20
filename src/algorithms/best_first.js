@@ -27,7 +27,8 @@ export const best_first = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) =
         }
         console.log("neighbours================",neighbours);
         for (let i = 0; i < neighbours.length; i++) {
-            const neighbour = neighbours[i];
+            const neighbour = neighbours[i][0];
+            const isDiagonal=neighbours[i][1];
             let h_score= 0;
 
             if (Grid[neighbour[0]][neighbour[1]].props.isWall && !Grid[neighbour[0]][neighbour[1]].props.isEnd) {

@@ -47,7 +47,8 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
         }
         
         for (let i = 0; i < neighbours.length; i++) {
-            const neighbour = neighbours[i];
+            const neighbour = neighbours[i][0];
+            const isDiagonal=neighbours[i][1];
             //if node already in stack, then remove it and push it to the back
             if (contains(removed,neighbour)) continue;
             let cost = 0;
@@ -55,7 +56,8 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
                 continue
             }
             else {
-                cost = 1 + head[2];
+                if(isDiagonal) cost = 1.41 + head[2];
+                else cost = 1 + head[2];
             }
             stack.push([neighbour[0], neighbour[1], cost, head]);
             if (neighbour[0] === endLoc[0] && neighbour[1] === endLoc[1]) {

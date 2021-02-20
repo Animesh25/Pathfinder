@@ -48,15 +48,17 @@ export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid,chosenDire
         
         
         for (let i = 0; i < neighbours.length; i++) {
-            const neighbour = neighbours[i];
-            
+            const neighbour = neighbours[i][0];
+            const isDiagonal=neighbours[i][1];
             if (contains(visited, neighbour)) continue;
             let cost = 0;
             if (Grid[neighbour[0]][neighbour[1]].props.isWall && !Grid[neighbour[0]][neighbour[1]].props.isEnd) {
                 continue
             }
             else {
-                cost = 1 + node_lowest_cost[2];
+                if(isDiagonal) cost = 1.41 + node_lowest_cost[2];
+                else cost = 1 + node_lowest_cost[2];
+                
             }
             if (neighbour[0] === endLoc[0] && neighbour[1] === endLoc[1]) {
                 visited.push(node_lowest_cost);

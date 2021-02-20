@@ -26,7 +26,8 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => 
         }
         // console.log("neighbours================",neighbours);
         for (let i = 0; i < neighbours.length; i++) {
-            const neighbour = neighbours[i];
+            const neighbour = neighbours[i][0];
+            const isDiagonal=neighbours[i][1];
             let g_score, h_score, f_score = 0;
 
             if (Grid[neighbour[0]][neighbour[1]].props.isWall && !Grid[neighbour[0]][neighbour[1]].props.isEnd) {
@@ -37,7 +38,9 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => 
                 // f_score = g_score + h_score;
             }
             else {
-                g_score = node_lowest_cost[2] + 2;
+                if(isDiagonal) g_score = node_lowest_cost[2] + 2.4;
+                else g_score = node_lowest_cost[2] + 2;
+                
                 h_score = distance_from_end(neighbour,endLoc);
                 f_score = g_score + h_score;
             }
