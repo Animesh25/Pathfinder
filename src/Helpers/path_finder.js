@@ -23,7 +23,6 @@ export const draw_path = async (Grid, path, i, type) => {
     if (i > 0 && i < path.length - 1) {
         const x = path[i][0];
         const y = path[i][1]
-        // console.log("node=", x, y);
         // console.log(newGrid[x][y])
         if (type === "visited") {
             newGrid[x][y] = <Node

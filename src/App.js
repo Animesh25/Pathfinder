@@ -7,6 +7,7 @@ import { dijkstra_algorithm } from './algorithms/dijkstra';
 import { bfs } from './algorithms/breadth_first';
 import { dfs } from './algorithms/depth_first';
 import { best_first } from './algorithms/best_first';
+import { bidirectional } from './algorithms/bidirectional_search';
 import { timeout, find_path_from_closed, draw_path } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
 import { verticalMaze, horizontalMaze } from './Helpers/maze_creation';
@@ -216,6 +217,17 @@ function App() {
     await draw_path_helper(closed_nodes, 1, "visited");
     await find_path_from_closed_helper(closed_nodes);
   }
+  const bidirectional_search = async () => {
+    let closed_nodes = bidirectional(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+    console.log("bi-path=",closed_nodes);
+    clear_visited_path();
+    clear_old_path(gridPath);
+    setVisited(closed_nodes);
+    await draw_path_helper(closed_nodes, 1, "visited");
+    
+    let final_path = findPath(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+    find_path_from_closed_helper(final_path);
+  }
 
   const best_first_search = async () => {
     let closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
@@ -235,10 +247,12 @@ function App() {
     await draw_path_helper(closed_nodes, 1, "visited");
     await draw_path_helper(closed_nodes, 1, "path");
   }
-  const aStarSearch = () => {
+  const aStarSearch =async () => {
     clear_visited_path();
     clear_old_path(gridPath);
     let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+    setVisited(closed_nodes);
+    await draw_path_helper(closed_nodes, 1, "visited");
     find_path_from_closed_helper(closed_nodes);
   }
   const find_path_from_closed_helper = async (closed_nodes) => {
@@ -282,7 +296,7 @@ function App() {
 
 
   const draw_path_helper = async (path, i, type) => {
-    if (i > 0 && i < path.length - 1) {
+    if (i>0 && i < path.length - 1) {
       let newGrid = await draw_path(Grid, path, i, type)
       setGrid(newGrid);
       await timeout(5);
@@ -340,7 +354,7 @@ function App() {
     setGrid(grid);
   }
   const algorithmOptions = [
-    'A* star', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search'
+    'A* star', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search', 'bidirectional_search'
   ];
   const directionOptions = [
     '4-Directional', '6-Directional'
@@ -361,6 +375,7 @@ function App() {
     else if (chosenAlgorithm === "Best-First Search") {
       best_first_search();
     }
+    else if (chosenAlgorithm === "bidirectional_search") bidirectional_search();
   }
 
 
@@ -379,12 +394,6 @@ function App() {
         />
         <button className="button" onClick={() => setGrid(horizontalMaze(startLoc, endLoc, Grid.slice()))}>horizontalMaze</button>
         <button className="button" onClick={() => setGrid(verticalMaze(startLoc, endLoc, Grid.slice()))}>verticalMaze</button>
-        {/* <button className="button" onClick={() => aStarSearch()}>A* search</button>
-        <button className="button" onClick={() => dijkstra()}>Dijkstra</button>
-        <button className="button" onClick={() => BFS()}>BFS</button>
-        <button className="button" onClick={() => DFS()}>DFS</button>
-        <button className="button" onClick={() => best_first_search()}>Best First Search</button> */}
-
       </div>
       <div className="container">
         {Grid.map((row, yIndex) => {
