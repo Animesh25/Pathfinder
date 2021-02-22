@@ -10,7 +10,7 @@ import { best_first } from './algorithms/best_first';
 import { bidirectional } from './algorithms/bidirectional_search';
 import { timeout, find_path_from_closed, draw_path } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
-import { verticalMaze, horizontalMaze } from './Helpers/maze_creation';
+import { mazeOne, loop,mazeTwo } from './Helpers/maze_creation';
 import ColourCode from './Components/ColourCode';
 
 
@@ -28,7 +28,6 @@ function App() {
   const [visitedPath, setVisited] = useState([]);
   const [chosenAlgorithm, setAlgorithm] = useState("");
   const [chosenDirection, setDirection] = useState("");
-
 
   useEffect(() => {
     setGrid(createGrid());
@@ -219,12 +218,12 @@ function App() {
   }
   const bidirectional_search = async () => {
     let closed_nodes = bidirectional(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
-    console.log("bi-path=",closed_nodes);
+    console.log("bi-path=", closed_nodes);
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
     await draw_path_helper(closed_nodes, 1, "visited");
-    
+
     let final_path = findPath(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     find_path_from_closed_helper(final_path);
   }
@@ -247,7 +246,7 @@ function App() {
     await draw_path_helper(closed_nodes, 1, "visited");
     await draw_path_helper(closed_nodes, 1, "path");
   }
-  const aStarSearch =async () => {
+  const aStarSearch = async () => {
     clear_visited_path();
     clear_old_path(gridPath);
     let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
@@ -296,7 +295,7 @@ function App() {
 
 
   const draw_path_helper = async (path, i, type) => {
-    if (i>0 && i < path.length - 1) {
+    if (i > 0 && i < path.length - 1) {
       let newGrid = await draw_path(Grid, path, i, type)
       setGrid(newGrid);
       await timeout(5);
@@ -352,12 +351,37 @@ function App() {
       }
     }
     setGrid(grid);
+
+  }
+  const emptyGrid = () => {
+    let grid = [];
+    for (let y = 0; y < ROWS; y++) {
+      grid.push([]);
+      for (let x = 0; x < COLS; x++) {
+        grid[y].push(
+          <Node
+            handleMouseDown={() => handleMouseDown(x, y)}
+            handleMouseEnter={() => handleMouseEnter(x, y)}
+            handleMouseUp={() => handleMouseUp(x, y)}
+            isWall={false}
+            isPath={false}
+            isVisited={false}
+            isStart={Grid[y][x].props.isStart}
+            isEnd={Grid[y][x].props.isEnd} />
+        );
+      }
+    }
+    return grid;
+
   }
   const algorithmOptions = [
     'A* star', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search', 'bidirectional_search'
   ];
   const directionOptions = [
     '4-Directional', '6-Directional'
+  ]
+  const mazeOptions = [
+    'Loop', 'Maze 1', 'Maze 2'
   ]
   const startAlgorithm = () => {
     if (chosenAlgorithm === "A* star") {
@@ -378,6 +402,37 @@ function App() {
     else if (chosenAlgorithm === "bidirectional_search") bidirectional_search();
   }
 
+  const createWalls = (value) => {
+
+    if (value === "Maze 1") {
+      setGrid(mazeOne(startLoc, endLoc, emptyGrid()))
+    }
+    else if (value === "Maze 2") {
+      setGrid(mazeTwo(startLoc, endLoc, emptyGrid()))
+    }
+    else if (value === "Loop") {
+      setGrid(loop(startLoc, endLoc, emptyGrid()))
+    }
+
+  }
+  const give2dArray = () => {
+    let arr = [];
+    console.log("grid=", Grid[0][1]);
+    for (let i = 0; i < Grid.length; i++) {
+      arr.push([]);
+      for (let j = 0; j < Grid[i].length; j++) {
+        if (Grid[i][j].props.isWall === true) {
+          arr[i].push(1);
+        }
+        else {
+          arr[i].push(0);
+        }
+      }
+      // arr.push(subArr);
+    }
+    console.log("arr=", arr);
+  }
+
 
 
 
@@ -392,8 +447,10 @@ function App() {
         <Dropdown options={directionOptions} default={"6-Directional"}
           dropDownValueChanged={(value) => setDirection(value)}
         />
-        <button className="button" onClick={() => setGrid(horizontalMaze(startLoc, endLoc, Grid.slice()))}>horizontalMaze</button>
-        <button className="button" onClick={() => setGrid(verticalMaze(startLoc, endLoc, Grid.slice()))}>verticalMaze</button>
+        <Dropdown options={mazeOptions} default={"Select Maze"}
+          dropDownValueChanged={(value) => createWalls(value)}
+        />
+        <button className="button" onClick={() => give2dArray()}>Give 2d Arr</button>
       </div>
       <div className="container">
         {Grid.map((row, yIndex) => {
