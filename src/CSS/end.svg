@@ -1,10 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="40" height="40">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="25" height="25">
 	<defs>
 		<image width="32" height="32" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAAAXNSR0IB2cksfwAAAANQTFRF////p8QbyAAAAAxJREFUeJxjYBjcAAAAoAABsAZiGAAAAABJRU5ErkJggg=="/>
 	</defs>
 	<style>
 		tspan { white-space:pre }
+		.shp0 { fill: #000000 } 
 	</style>
-	<use id="img1" href="#img1" x="0" y="0" />
-	<path id="E " fill="#000000" d="M9.2 24L9.2 6.5L21.38 6.5L21.38 9.91L13.71 9.91L13.71 13.17L20.92 13.17L20.92 16.58L13.71 16.58L13.71 20.59L21.64 20.59L21.64 24L9.2 24Z" />
+	<use id="img1" href="#img1" transform="matrix(1,0,0,1,0,0)"/>
+	<path id="E " class="shp0" d="M9.2 24L9.2 6.5L21.38 6.5L21.38 9.91L13.71 9.91L13.71 13.17L20.92 13.17L20.92 16.58L13.71 16.58L13.71 20.59L21.64 20.59L21.64 24L9.2 24Z" />
 </svg>

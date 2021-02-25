@@ -10,16 +10,16 @@ import { best_first } from './algorithms/best_first';
 import { bidirectional } from './algorithms/bidirectional_search';
 import { timeout, find_path_from_closed, draw_path } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
-import { mazeOne, loop,mazeTwo } from './Helpers/maze_creation';
+import { mazeOne, loop, mazeTwo } from './Helpers/maze_creation';
 import ColourCode from './Components/ColourCode';
-
+import Results from './Components/Results';
 
 
 
 function App() {
 
   const [Grid, setGrid] = useState([]);
-  const [mouseDown, setMouseDown] = useState(false);
+  const [MouseDown, setMouseDown] = useState(false);
   const [startLoc, setStartLoc] = useState([5, 5]);
   const [endLoc, setEndLoc] = useState([5, 15]);
   const [startDrag, setStartDrag] = useState(false);
@@ -28,14 +28,15 @@ function App() {
   const [visitedPath, setVisited] = useState([]);
   const [chosenAlgorithm, setAlgorithm] = useState("");
   const [chosenDirection, setDirection] = useState("");
+  const [startTime,setStartTime]=useState(0);
 
   useEffect(() => {
     setGrid(createGrid());
 
   }, []);
-
-  const ROWS = 15;
-  const COLS = 45;
+  
+  const ROWS = 18;
+  const COLS = 55;
 
   const createGrid = () => {
 
@@ -78,15 +79,15 @@ function App() {
 
 
   const handleMouseDown = (x, y) => {
+    setMouseDown(true);
     if (x === null || y === null || x < 0 || y < 0) return;
     // console.log("mouse down at", x, ",", y);
-    setMouseDown(true);
+    
     console.log("start drag-------------x,y=", x, ",", y);
-    console.log("start drag-------------startLoc0,startLoc1=", startLoc[0], ",", startLoc[1]);
-    if (x == startLoc[0] && y == startLoc[1]) {
+    if (x === startLoc[0] && y === startLoc[1]) {
       setStartDrag(true);
     }
-    else if (x == endLoc[0] && y == endLoc[1]) {
+    else if (x === endLoc[0] && y === endLoc[1]) {
       setEndDrag(true);
     }
     else {
@@ -118,7 +119,7 @@ function App() {
     if (x === null || y === null || x < 0 || y < 0) return;
     if (x === endLoc[0] && y === endLoc[1]) return;
     if (x === startLoc[0] && y === startLoc[1]) return;
-    if (mouseDown) {
+    if (MouseDown) {
       let newGrid = Grid.slice();
       if (!startDrag && !endDrag) {
         newGrid[x][y] =
@@ -187,8 +188,9 @@ function App() {
 
   }
   const handleMouseUp = (x, y) => {
-    if (x === null || y === null || x < 0 || y < 0) return;
     setMouseDown(false);
+    if (x === null || y === null || x < 0 || y < 0) return;
+
     if (startDrag) {
       setStart(x, y)
     }
@@ -242,6 +244,7 @@ function App() {
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
+    setPath(closed_nodes);
     // console.log("length=", closed_nodes.length);
     await draw_path_helper(closed_nodes, 1, "visited");
     await draw_path_helper(closed_nodes, 1, "path");
@@ -254,6 +257,7 @@ function App() {
     await draw_path_helper(closed_nodes, 1, "visited");
     find_path_from_closed_helper(closed_nodes);
   }
+
   const find_path_from_closed_helper = async (closed_nodes) => {
     let path = await find_path_from_closed(closed_nodes, startLoc);;
     setPath(path);
@@ -295,6 +299,7 @@ function App() {
 
 
   const draw_path_helper = async (path, i, type) => {
+    
     if (i > 0 && i < path.length - 1) {
       let newGrid = await draw_path(Grid, path, i, type)
       setGrid(newGrid);
@@ -383,23 +388,26 @@ function App() {
   const mazeOptions = [
     'Loop', 'Maze 1', 'Maze 2'
   ]
-  const startAlgorithm = () => {
+  const startAlgorithm = async() => {
+    setStartTime(performance.now());
     if (chosenAlgorithm === "A* star") {
-      aStarSearch()
+      await aStarSearch()
     }
     else if (chosenAlgorithm === "Dijkstra") {
-      dijkstra()
+      await dijkstra()
     }
     else if (chosenAlgorithm === "Breadth-First Search") {
-      BFS()
+      await BFS()
     }
     else if (chosenAlgorithm === "Depth-First Search") {
-      DFS()
+      await  DFS()
     }
     else if (chosenAlgorithm === "Best-First Search") {
-      best_first_search();
+      await best_first_search();
     }
     else if (chosenAlgorithm === "bidirectional_search") bidirectional_search();
+    
+    
   }
 
   const createWalls = (value) => {
@@ -474,9 +482,11 @@ function App() {
               })}
             </div>
           )
-
         })}
-        <ColourCode />
+        <div className={"bottomContainer"}>
+          <Results startTime={startTime} content={gridPath}/>
+          <ColourCode />
+        </div>
 
       </div>
     </div>

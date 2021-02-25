@@ -1,20 +1,23 @@
+.node:hover{
+    cursor: default;
+}
 .node{
-    border: 1px solid;
-    width: 30px;
-    height: 30px;
+    border: 0.5px solid;
+    width: 25px;
+    height: 25px;
     display: table-cell;
     background-color: whitesmoke;
     margin: 1em 1em 0 1em;
 }
 .wall{
     background-image:url(star.svg);
-    border: 1px solid;
+    border: 0.5px solid;
     background-position: center;
     background-repeat: no-repeat;
     
     
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     display: table-cell;
     /* background-color:red; */
     animation-name: create_animation;
@@ -22,6 +25,9 @@
     animation-timing-function: ease-in;
     animation-fill-mode: forwards;
     margin: 1em 1em 0 1em;
+}
+.wall:hover{
+    cursor: default;
 }
 @keyframes create_animation{
     0% {background-color:rgba(206, 206, 206, 0.37);background-size:5%;}
@@ -33,25 +39,25 @@
 
 .start{
     background-image:url(start.svg);
-    border: 1px solid;
-    width: 30px;
-    height: 30px;
+    border: 0.5px solid;
+    width: 25px;
+    height: 25px;
     display: table-cell;
     /* background-color:greenyellow; */
     margin: 1em 1em 0 1em;
 }
 .end{
-    border: 1px solid;
-    width: 30px;
-    height: 30px;
+    border: 0.5px solid;
+    width: 25px;
+    height: 25px;
     display: table-cell;
     background-image:url(end.svg);
     margin: 1em 1em 0 1em;
 }
 .visited{
-    border: 1px solid;
-    width: 30px;
-    height: 30px;
+    border: 0.5px solid;
+    width: 25px;
+    height: 25px;
     display: table-cell;
      background-color:khaki; 
     animation-name: path_animation;
@@ -66,9 +72,9 @@
 }
 .path{
    
-    border: 1px solid;
-    width: 30px;
-    height: 30px;
+    border: 0.5px solid;
+    width: 25px;
+    height: 25px;
     display: table-cell;
      background-color:lightskyblue; 
     animation-name: path_animation;
