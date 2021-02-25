@@ -1,4 +1,4 @@
-import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
+import {getFourNeighbours,getEightNeighbours} from './common_methods/methods';
 
 
 export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
@@ -43,7 +43,7 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
             neighbours= getFourNeighbours(head, ROWS, COLS);
         }
         else{
-            neighbours= getSixNeighbours(head, ROWS, COLS);
+            neighbours= getEightNeighbours(head, ROWS, COLS);
         }
         
         for (let i = 0; i < neighbours.length; i++) {
@@ -148,7 +148,7 @@ const distance_from_start = (node, startLoc) => {
     return ((x * x) + (y * y))
 }
 const distance_from_end = (node, endLoc) => {
-    console.log("distance end====================================", node, "  endLoc=", endLoc);
+    // console.log("distance end====================================", node, "  endLoc=", endLoc);
     const x = Math.abs(node[0] - endLoc[0]);
     const y = Math.abs(node[1] - endLoc[1]);
     return ((x * x) + (y * y))

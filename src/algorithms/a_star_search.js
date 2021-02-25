@@ -1,5 +1,5 @@
 
-import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
+import {getFourNeighbours,getEightNeighbours} from './common_methods/methods';
 
 export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
@@ -22,7 +22,7 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => 
             neighbours= getFourNeighbours(node_lowest_cost, ROWS, COLS);
         }
         else{
-            neighbours= getSixNeighbours(node_lowest_cost, ROWS, COLS);
+            neighbours= getEightNeighbours(node_lowest_cost, ROWS, COLS);
         }
         // console.log("neighbours================",neighbours);
         for (let i = 0; i < neighbours.length; i++) {
@@ -50,7 +50,7 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => 
                 closed_nodes.push(node_lowest_cost);
                 closed_nodes.push([neighbour[0], neighbour[1], f_score, h_score, g_score, node_lowest_cost]);
                 console.log("end found at:",endLoc);
-                break;
+                return closed_nodes;
             }
 
             if (contains(open_nodes, neighbour)) {
@@ -74,55 +74,19 @@ export const findPath = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => 
         if (closed_nodes.length > 0) {
             const last_closed = closed_nodes[closed_nodes.length - 1];
             if (last_closed[0] === endLoc[0] && last_closed[1] === endLoc[1]) {       
-                break;
+                return closed_nodes;
             }
         }
         if (!contains(closed_nodes, node_lowest_cost)) {
             closed_nodes.push(node_lowest_cost);
         }
     }
+
     return closed_nodes;
 
 }
 
- const getNeighbours = (node,ROWS,COLS) => {
-    // node=node.value
-    // console.log("row in get neigbours=",ROWS);
-    let neighbours = [];
-    // console.log("niehgbours func node=",node.value)
-    if (node[0] > 0) {
-        neighbours.push([node[0] - 1, node[1]]);
-        if (node[1] > 0) {
-            neighbours.push([node[0] - 1, node[1] - 1]);
-        }
-    }
-    if (node[1] > 0) {
-        neighbours.push([node[0], node[1] - 1]);
-        if (node[0] < ROWS - 1) {
-            neighbours.push([node[0] + 1, node[1] - 1]);
-        }
-    }
-    if (node[0] < ROWS - 1) {
-        neighbours.push([node[0] + 1, node[1]]);
-        if (node[1] < COLS - 1) {
-            neighbours.push([node[0] + 1, node[1] + 1]);
-        }
-    }
-    if (node[1] < COLS - 1) {
-        neighbours.push([node[0], node[1] + 1]);
-        if (node[0] > 0) {
-            neighbours.push([node[0] - 1, node[1] + 1]);
-        }
-    }
 
-    return neighbours;
-
-}
- const distance_from_start = (node,startLoc) => {
-    const x = Math.abs(node[0] - startLoc[0]);
-    const y = Math.abs(node[1] - startLoc[1]);
-    return ((x * x) + (y * y))
-}
  const distance_from_end = (node,endLoc) => {
     //  console.log("distance end====================================",node,"  endLoc=",endLoc);
     const x = Math.abs(node[0] - endLoc[0]);

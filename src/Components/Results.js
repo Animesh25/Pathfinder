@@ -5,11 +5,18 @@ import '../CSS/grid.css';
 export default function Results(props) {
 
     useEffect(() => {
-        setContent(props.content) //> I'm dispatching an action here.
         // setStartTime(props.startTime);
-        setBody(body + '\nPath Length = ' + props.content.length + " & Time Taken = " + (performance.now() - props.startTime))
+        if(props.content===null){
+            setBody(body + '\nNo path found for: '+props.chosenAlgorithm);
+        }
+        else if (props.content.length !== 0) {
+            const timeTaken=Math.round((performance.now() - props.startTime)/1000 * 100) / 100
+            
+            setBody(body + '\n'+props.chosenAlgorithm+' Algorithm & Path Length = ' + props.content.length + " & Time Taken = " + timeTaken+" seconds")
+        }
+
     }, [props.content])
-    const [content, setContent] = useState(props.content);
+
 
     const [body, setBody] = useState("");
 

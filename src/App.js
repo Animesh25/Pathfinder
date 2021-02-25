@@ -10,7 +10,7 @@ import { best_first } from './algorithms/best_first';
 import { bidirectional } from './algorithms/bidirectional_search';
 import { timeout, find_path_from_closed, draw_path } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
-import { mazeOne, loop, mazeTwo } from './Helpers/maze_creation';
+import { makeMaze } from './Helpers/maze_creation';
 import ColourCode from './Components/ColourCode';
 import Results from './Components/Results';
 
@@ -28,13 +28,13 @@ function App() {
   const [visitedPath, setVisited] = useState([]);
   const [chosenAlgorithm, setAlgorithm] = useState("");
   const [chosenDirection, setDirection] = useState("");
-  const [startTime,setStartTime]=useState(0);
+  const [startTime, setStartTime] = useState(0);
 
   useEffect(() => {
     setGrid(createGrid());
 
   }, []);
-  
+
   const ROWS = 18;
   const COLS = 55;
 
@@ -82,7 +82,7 @@ function App() {
     setMouseDown(true);
     if (x === null || y === null || x < 0 || y < 0) return;
     // console.log("mouse down at", x, ",", y);
-    
+
     console.log("start drag-------------x,y=", x, ",", y);
     if (x === startLoc[0] && y === startLoc[1]) {
       setStartDrag(true);
@@ -207,7 +207,7 @@ function App() {
     clear_old_path(gridPath);
     setVisited(closed_nodes);
     await draw_path_helper(closed_nodes, 1, "visited");
-    await find_path_from_closed_helper(closed_nodes);
+    await checkEndLocExists(closed_nodes);
   }
   const BFS = async () => {
     let closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
@@ -216,7 +216,7 @@ function App() {
     clear_old_path(gridPath);
     setVisited(closed_nodes);
     await draw_path_helper(closed_nodes, 1, "visited");
-    await find_path_from_closed_helper(closed_nodes);
+    await checkEndLocExists(closed_nodes);
   }
   const bidirectional_search = async () => {
     let closed_nodes = bidirectional(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
@@ -227,7 +227,7 @@ function App() {
     await draw_path_helper(closed_nodes, 1, "visited");
 
     let final_path = findPath(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
-    find_path_from_closed_helper(final_path);
+    await checkEndLocExists(final_path);
   }
 
   const best_first_search = async () => {
@@ -235,9 +235,9 @@ function App() {
     clear_visited_path();
     clear_old_path(gridPath);
     setVisited(closed_nodes);
-    // console.log("length=", closed_nodes.length);
+    console.log("length=", closed_nodes);
     await draw_path_helper(closed_nodes, 1, "visited");
-    await find_path_from_closed_helper(closed_nodes);
+    await checkEndLocExists(closed_nodes);
   }
   const DFS = async () => {
     let closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
@@ -247,7 +247,7 @@ function App() {
     setPath(closed_nodes);
     // console.log("length=", closed_nodes.length);
     await draw_path_helper(closed_nodes, 1, "visited");
-    await draw_path_helper(closed_nodes, 1, "path");
+    await checkEndLocExists(closed_nodes);
   }
   const aStarSearch = async () => {
     clear_visited_path();
@@ -255,7 +255,19 @@ function App() {
     let closed_nodes = findPath(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     setVisited(closed_nodes);
     await draw_path_helper(closed_nodes, 1, "visited");
-    find_path_from_closed_helper(closed_nodes);
+
+    await checkEndLocExists(closed_nodes);
+
+  }
+  const checkEndLocExists = async(closed_nodes) => {
+    const lastElement = closed_nodes[closed_nodes.length - 1];
+    if (lastElement[0] === endLoc[0] && lastElement[1] === endLoc[1]) {
+      await find_path_from_closed_helper(closed_nodes);
+    }
+    else {
+      setPath([]);
+      setPath(null);
+    }
   }
 
   const find_path_from_closed_helper = async (closed_nodes) => {
@@ -280,6 +292,7 @@ function App() {
     setGrid(newGrid);
   }
   const clear_old_path = (path) => {
+    if(path===null || path===undefined) return;
     const newGrid = Grid.slice();
 
     for (let i = 1; i < path.length - 1; i++) {
@@ -299,11 +312,11 @@ function App() {
 
 
   const draw_path_helper = async (path, i, type) => {
-    
-    if (i > 0 && i < path.length - 1) {
+
+    if (i > 0 && i <= path.length - 1) {
       let newGrid = await draw_path(Grid, path, i, type)
       setGrid(newGrid);
-      await timeout(5);
+      await timeout(2);
       await draw_path_helper(path, i + 1, type);
     }
   }
@@ -380,18 +393,19 @@ function App() {
 
   }
   const algorithmOptions = [
-    'A* star', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search', 'bidirectional_search'
+    'A* Search', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search', 'bidirectional_search'
   ];
   const directionOptions = [
-    '4-Directional', '6-Directional'
+    '4-Directional', '8-Directional'
   ]
   const mazeOptions = [
-    'Loop', 'Maze 1', 'Maze 2'
+    'Loop', 'Maze 1', 'Maze 2', 'Boxed'
   ]
-  const startAlgorithm = async() => {
+  const startAlgorithm = async () => {
     setStartTime(performance.now());
-    if (chosenAlgorithm === "A* star") {
-      await aStarSearch()
+    if (chosenAlgorithm === "A* Search") {
+      await aStarSearch();
+
     }
     else if (chosenAlgorithm === "Dijkstra") {
       await dijkstra()
@@ -400,27 +414,18 @@ function App() {
       await BFS()
     }
     else if (chosenAlgorithm === "Depth-First Search") {
-      await  DFS()
+      await DFS()
     }
     else if (chosenAlgorithm === "Best-First Search") {
       await best_first_search();
     }
     else if (chosenAlgorithm === "bidirectional_search") bidirectional_search();
-    
-    
+
+
   }
 
   const createWalls = (value) => {
-
-    if (value === "Maze 1") {
-      setGrid(mazeOne(startLoc, endLoc, emptyGrid()))
-    }
-    else if (value === "Maze 2") {
-      setGrid(mazeTwo(startLoc, endLoc, emptyGrid()))
-    }
-    else if (value === "Loop") {
-      setGrid(loop(startLoc, endLoc, emptyGrid()))
-    }
+    setGrid(makeMaze(startLoc, endLoc, emptyGrid(), value));
 
   }
   const give2dArray = () => {
@@ -452,7 +457,7 @@ function App() {
         />
         <button className="startButton" onClick={() => startAlgorithm()}>Start {chosenAlgorithm}</button>
         <button className="button" onClick={() => clearWalls()}>Clear Walls</button>
-        <Dropdown options={directionOptions} default={"6-Directional"}
+        <Dropdown options={directionOptions} default={"8-Directional"}
           dropDownValueChanged={(value) => setDirection(value)}
         />
         <Dropdown options={mazeOptions} default={"Select Maze"}
@@ -484,7 +489,7 @@ function App() {
           )
         })}
         <div className={"bottomContainer"}>
-          <Results startTime={startTime} content={gridPath}/>
+          <Results chosenAlgorithm={chosenAlgorithm} startTime={startTime} content={gridPath} />
           <ColourCode />
         </div>
 

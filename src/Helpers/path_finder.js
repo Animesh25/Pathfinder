@@ -20,10 +20,9 @@ export const find_path_from_closed = async (closed_nodes, startLoc) => {
 }
 export const draw_path = async (Grid, path, i, type) => {
     const newGrid = Grid.slice();
-    if (i > 0 && i < path.length - 1) {
+    if (i > 0 && i <= path.length - 1) {
         const x = path[i][0];
-        const y = path[i][1]
-        // console.log(newGrid[x][y])
+        const y = path[i][1];
         if (type === "visited") {
             newGrid[x][y] = <Node
                 isWall={false}

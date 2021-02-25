@@ -1,4 +1,4 @@
-import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
+import {getFourNeighbours,getEightNeighbours} from './common_methods/methods';
 
 
 export const bfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
@@ -40,7 +40,7 @@ export const bfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
             neighbours= getFourNeighbours(head, ROWS, COLS);
         }
         else{
-            neighbours= getSixNeighbours(head, ROWS, COLS);
+            neighbours= getEightNeighbours(head, ROWS, COLS);
         }
 
         for (let i = 0; i < neighbours.length; i++) {

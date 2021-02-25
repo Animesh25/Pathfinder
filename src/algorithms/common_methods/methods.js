@@ -1,6 +1,6 @@
-export const getSixNeighbours = (node, ROWS, COLS) => {
+export const getEightNeighbours = (node, ROWS, COLS) => {
     // node=node.value
-    // console.log("row in get neigbours=", ROWS);
+    // console.log("8 neighbours");
     let neighbours = [];
     // console.log("niehgbours func node=",node.value)
     if (node[0] > 0) {

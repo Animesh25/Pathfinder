@@ -1,4 +1,4 @@
-import {getFourNeighbours,getSixNeighbours} from './common_methods/methods';
+import {getFourNeighbours,getEightNeighbours} from './common_methods/methods';
 
 export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
@@ -42,7 +42,7 @@ export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid,chosenDire
             neighbours= getFourNeighbours(node_lowest_cost, ROWS, COLS);
         }
         else{
-            neighbours= getSixNeighbours(node_lowest_cost, ROWS, COLS);
+            neighbours= getEightNeighbours(node_lowest_cost, ROWS, COLS);
         }
         
         
