@@ -1,6 +1,7 @@
 import { getFourNeighbours, getEightNeighbours } from './common_methods/methods';
 
 let removed = [];
+let intersect;
 export const bidirectional = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirection) => {
     removed=[];
 
@@ -42,10 +43,14 @@ export const bidirectional = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirectio
         end_queue=updateEnd[0];
         endResult=updateEnd[1];
                 
-        if(startResult || endResult) return removed;
+        if(startResult || endResult){
+            console.log("removed before=", [removed,(intersect[0],intersect[1])]);
+            return [removed,intersect];
+        } 
         
     }
-    return removed;
+    
+    return [removed,intersect];
 
 
 }
@@ -55,6 +60,9 @@ const update_queue = (queue,ROWS,COLS,Grid,chosenDirection) => {
     if (head === undefined) { console.log("head=undefined so break"); queue.shift(); return queue }
     
     if(contains(removed,head)){
+        intersect=head;
+        console.log("head=",head,"  in queue");
+        removed.push(head);
         return [queue,true]
     } 
     

@@ -95,3 +95,9 @@
 .title{
     position: fixed;
 }
+.running{
+    background-color: lightpink;
+}
+.running:hover{
+    background-color: rgb(252, 172, 184);
+}
