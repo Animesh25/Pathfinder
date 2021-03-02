@@ -35,6 +35,7 @@ function App() {
   const [chosenDirection, setDirection] = useState("");
   const [startTime, setStartTime] = useState(0);
 
+  
 
 
   useEffect(() => {
@@ -50,23 +51,14 @@ function App() {
       grid.push([]);
       for (let x = 0; x < COLS; x++) {
         grid[y].push(
-          <Node
-            isWall={false} />
+          <Node/>
         );
       }
     }
     grid[startLoc[0]][startLoc[1]] = <Node
-      isWall={false}
       isStart={true}
-      isEnd={false}
-      isPath={false}
-      isVisited={false}
     />;
     grid[endLoc[0]][endLoc[1]] = <Node
-      isWall={false}
-      isStart={false}
-      isPath={false}
-      isVisited={false}
       isEnd={true}
 
     />;
@@ -110,9 +102,6 @@ function App() {
         newGrid[x][y] =
           <Node
             key={y}
-            isStart={false}
-            isPath={false}
-            isVisited={false}
             isWall={!newGrid[x][y].props.isWall} />
       }
       if (startDrag) {
@@ -124,10 +113,6 @@ function App() {
 
         newGrid[startLoc[0]][startLoc[1]] = <Node
           isWall={newGrid[startLoc[0]][startLoc[1]].props.isWall}
-          isStart={false}
-          isEnd={false}
-          isPath={false}
-          isVisited={false}
         />;
         setStartLoc([x, y])
       }
@@ -135,17 +120,13 @@ function App() {
         newGrid[x][y] =
           <Node
             key={y}
-            isStart={false}
             isEnd={true}
             isWall={newGrid[x][y].props.isWall}
-            isPath={false}
-            isVisited={false} />
+
+            />
         newGrid[endLoc[0]][endLoc[1]] = <Node
           isWall={newGrid[endLoc[0]][endLoc[1]].props.isWall}
-          isStart={false}
-          isEnd={false}
-          isPath={false}
-          isVisited={false}
+
         />;
         console.log("set wall at endloc=", endLoc);
         setEndLoc([x, y])
