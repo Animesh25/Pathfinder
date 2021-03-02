@@ -15,8 +15,6 @@ import ColourCode from './Components/ColourCode';
 import Results from './Components/Results';
 import { clear_old_path, clear_visited_path, clearWalls, emptyGrid } from './Helpers/gridMethods';
 import { algorithmOptions, directionOptions, mazeOptions } from './Components/dropdownOptions';
-import BinaryHeap from './Components/binaryHeap';
-
 
 
 function App() {
@@ -247,7 +245,6 @@ function App() {
     }
     else if (chosenAlgorithm === "Best-First Search") {
       closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
-      console.log("BEST closed nodes=", closed_nodes);
     }
     else if (chosenAlgorithm === "Bidirectional search") {
       await bidirectional_search();
@@ -261,9 +258,7 @@ function App() {
     setRunning(false)
 
   }
-  const stopAlgorithm = () => {
-    console.log("stop pressed wantStop=", wantStop);
-  }
+
 
   const createWalls = (value) => {
     setGrid(makeMaze(startLoc, endLoc, emptyGrid(Grid, ROWS, COLS), value));
@@ -300,7 +295,7 @@ function App() {
           dropDownValueChanged={(value) => setAlgorithm(value)}
         />
         {isRunning && (
-          <button className="startButton running" onClick={() => stopAlgorithm()}>Running {!isRunning && chosenAlgorithm}</button>
+          <button className="startButton running">Running {!isRunning && chosenAlgorithm}</button>
         )}
         {!isRunning && (
           <button className="startButton" onClick={async () => await startAlgorithm()}>Start {chosenAlgorithm}</button>

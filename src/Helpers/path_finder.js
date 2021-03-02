@@ -16,7 +16,6 @@ export const find_path_from_closed = async (closed_nodes, startLoc) => {
             last = last[last.length - 1];
         }
     }
-    console.log("path===",path);
     return path;
 }
 export const findPathBidirectional = async (closed_nodes, targetNode) => {
@@ -24,8 +23,6 @@ export const findPathBidirectional = async (closed_nodes, targetNode) => {
     //Backtrack from it
     let path=[];
     let intersectOne;
-    console.log("targetNode=",targetNode);
-    console.log("give list=",closed_nodes);
     for(let i=0;i<closed_nodes.length;i++){
         const node=closed_nodes[i];
         if(node[0]===targetNode[0] && node[1]===targetNode[1]){
@@ -33,13 +30,11 @@ export const findPathBidirectional = async (closed_nodes, targetNode) => {
             break;
         }
     }
-    console.log("intersectOne=",intersectOne);
     let one=backTrack(intersectOne);
     let two=backTrack(targetNode);
     
     // let pathA=
-    console.log("one=",one);
-    console.log("two=",two);
+
     return one.concat(two);
 }
 const backTrack=(node)=>{
@@ -49,7 +44,7 @@ const backTrack=(node)=>{
         list.push(iterator[3]);
         iterator=iterator[3];
     }
-    console.log("backTrack from node=",node," is=",list);
+    // console.log("backTrack from node=",node," is=",list);
     return list;
 }
 export const draw_path = async (Grid, path, i, type) => {

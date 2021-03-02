@@ -44,7 +44,7 @@ export const bidirectional = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirectio
         endResult=updateEnd[1];
                 
         if(startResult || endResult){
-            console.log("removed before=", [removed,(intersect[0],intersect[1])]);
+            // console.log("removed before=", [removed,(intersect[0],intersect[1])]);
             return [removed,intersect];
         } 
         
@@ -61,7 +61,7 @@ const update_queue = (queue,ROWS,COLS,Grid,chosenDirection) => {
     
     if(contains(removed,head)){
         intersect=head;
-        console.log("head=",head,"  in queue");
+        // console.log("head=",head,"  in queue");
         removed.push(head);
         return [queue,true]
     } 
@@ -81,7 +81,7 @@ const update_queue = (queue,ROWS,COLS,Grid,chosenDirection) => {
         if (contains(queue, neighbour) || contains(removed, neighbour)) continue;
         let cost = 0;
         if (Grid[neighbour[0]][neighbour[1]].props.isWall && !Grid[neighbour[0]][neighbour[1]].props.isEnd) {
-            console.log("---------------------------------------")
+            // console.log("---------------------------------------")
             continue
         }
         else {

@@ -33,7 +33,7 @@ export const clear_old_path = (path, Grid) => {
 }
 export const clear_visited_path = (visitedPath,Grid) => {
     const newGrid = Grid.slice();
-    for (let i = 1; i < visitedPath.length - 1; i++) {
+    for (let i = 1; i < visitedPath.length; i++) {
       const x = visitedPath[i][0];
       const y = visitedPath[i][1]
       newGrid[x][y] = <Node
