@@ -22,7 +22,7 @@ export const a_star_search = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirectio
 
     while (open_nodes.length() >0 && open_nodes.length() < 2000) {
 
-        const node_lowest_cost = open_nodes.peekMin();
+        const node_lowest_cost = open_nodes.removeMin();
 
         if (node_lowest_cost === undefined) break;
 
@@ -88,7 +88,7 @@ export const a_star_search = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirectio
 
            
         }
-        open_nodes.remove(node_lowest_cost);
+        // open_nodes.remove(node_lowest_cost);
         if (!contains(closed_nodes, node_lowest_cost)) {
             closed_nodes.push(node_lowest_cost);
         }
