@@ -171,15 +171,14 @@ function App() {
     let closed_nodes = biOutput[0];
     const intersect = biOutput[1];
 
-    console.log("bi-biOutput=", biOutput);
+    // console.log("bi-biOutput=", biOutput);
     stepsBeforeExecution(closed_nodes);
     await draw_path_helper(closed_nodes, 1, "visited");
     let biPath = await findPathBidirectional(closed_nodes, intersect);
-    console.log("Find path from closed=", biPath);
+    setPath(biPath.slice(0,biPath.length-1));
+    // console.log("Find path from closed=", biPath);
     await draw_path_helper(biPath, 1, "path");
 
-    // let final_path = a_star_search(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
-    // await checkEndLocExists(final_path);
   }
 
 
@@ -191,8 +190,6 @@ function App() {
   const stepsAfterExecution = async (closed_nodes) => {
     await draw_path_helper(closed_nodes, 1, "visited");
     await checkEndLocExists(closed_nodes);
-    console.log("after execution--------");
-
   }
   const checkEndLocExists = async (closed_nodes) => {
     const lastElement = closed_nodes[closed_nodes.length - 1];
