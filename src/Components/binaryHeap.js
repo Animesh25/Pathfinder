@@ -1,12 +1,3 @@
-/*
-                1
-            2       3
-        
-
- 
-*/
-
-
 
 export default class BinaryHeap {
     constructor() {
@@ -77,7 +68,7 @@ export default class BinaryHeap {
             let leftChildIndex = 2 * index + 1;
             let rightChildIndex = 2 * index + 2;
             let leftChild, rightChild;
-            let swap = null;
+            let temp = null;
 
             let leftPriority,rightPriority;
             let currentPriority = current[current.length - 2];
@@ -86,23 +77,21 @@ export default class BinaryHeap {
                 leftChild = this.values[leftChildIndex];
                 leftPriority = leftChild[leftChild.length - 2];
                 currentPriority = current[current.length - 2];
-                if (leftPriority < currentPriority) swap = leftChildIndex;
+                if (leftPriority < currentPriority) temp = leftChildIndex;
             }
             if (rightChildIndex < length) {
                 rightChild = this.values[rightChildIndex];
                 leftPriority = leftChild[leftChild.length - 2];
                 rightPriority = rightChild[rightChild.length - 2]; 
-                if (
-                    (swap === null && rightPriority < currentPriority) ||
-                    (swap !== null && rightPriority < leftPriority)
-                )
-                    swap = rightChildIndex;
+                if ((temp === null && rightPriority < currentPriority) || (temp !== null && rightPriority < leftPriority)){
+                    temp = rightChildIndex;
+                }
             }
 
-            if (swap === null) break;
-            this.values[index] = this.values[swap];
-            this.values[swap] = current;
-            index = swap;
+            if (temp === null) break;
+            this.values[index] = this.values[temp];
+            this.values[temp] = current;
+            index = temp;
         }
 
         return min;
