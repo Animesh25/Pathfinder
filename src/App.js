@@ -8,7 +8,7 @@ import { bfs } from './algorithms/breadth_first';
 import { dfs } from './algorithms/depth_first';
 import { best_first } from './algorithms/best_first';
 import { bidirectional } from './algorithms/bidirectional_search';
-import { timeout, find_path_from_closed, draw_path,findPathBidirectional } from './Helpers/path_finder';
+import { timeout, find_path_from_closed, draw_path, findPathBidirectional } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
 import { makeMaze } from './Helpers/maze_creation';
 import ColourCode from './Components/ColourCode';
@@ -37,8 +37,8 @@ function App() {
   const [chosenDirection, setDirection] = useState("");
   const [startTime, setStartTime] = useState(0);
 
- 
- 
+
+
   useEffect(() => {
     setGrid(createGrid());
   }, []);
@@ -169,15 +169,15 @@ function App() {
 
 
   const bidirectional_search = async () => {
-    const biOutput=bidirectional(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+    const biOutput = bidirectional(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     let closed_nodes = biOutput[0];
-    const intersect=biOutput[1];
+    const intersect = biOutput[1];
 
     console.log("bi-biOutput=", biOutput);
     stepsBeforeExecution(closed_nodes);
     await draw_path_helper(closed_nodes, 1, "visited");
-    let biPath=await findPathBidirectional(closed_nodes,intersect);
-    console.log("Find path from closed=",biPath);
+    let biPath = await findPathBidirectional(closed_nodes, intersect);
+    console.log("Find path from closed=", biPath);
     await draw_path_helper(biPath, 1, "path");
 
     // let final_path = a_star_search(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
@@ -214,39 +214,6 @@ function App() {
     await draw_path_helper(path, 1, "path");
   }
 
-  // const draw_path_helper = async (path, sm, type) => {
-  //   for (let i = 1; i < path.length - 1; i++) {
-
-  //     const newGrid = Grid.slice();
-  //     const x = path[i][0];
-  //     const y = path[i][1];
-  //     if (type === "visited") {
-  //       newGrid[x][y] = <Node
-  //         isWall={false}
-  //         isStart={Grid[x][y].props.isStart}
-  //         isEnd={Grid[x][y].props.isEnd}
-  //         isPath={false}
-  //         isVisited={true}
-  //       />;
-  //     }
-  //     else {
-  //       newGrid[x][y] = <Node
-  //         isWall={false}
-  //         isStart={Grid[x][y].props.isStart}
-  //         isEnd={Grid[x][y].props.isEnd}
-  //         isPath={true}
-  //         isVisited={false}
-  //       />;
-  //     }
-  //     if (!wantStop) {
-  //       setGrid(newGrid);
-  //       await timeout(3);
-  //     }
-
-
-  //   }
-
-  // }
   const draw_path_helper = async (path, i, type) => {
     if (i > 0 && i <= path.length - 1) {
       let newGrid = await draw_path(Grid, path, i, type)
@@ -267,7 +234,7 @@ function App() {
     let closed_nodes;
     if (chosenAlgorithm === "A* Search") {
       closed_nodes = a_star_search(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
-      
+
     }
     else if (chosenAlgorithm === "Dijkstra") {
       closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
@@ -280,15 +247,19 @@ function App() {
     }
     else if (chosenAlgorithm === "Best-First Search") {
       closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
-      console.log("BEST closed nodes=",closed_nodes);
+      console.log("BEST closed nodes=", closed_nodes);
     }
-    else if (chosenAlgorithm === "bidirectional_search"){
-      bidirectional_search();
+    else if (chosenAlgorithm === "Bidirectional search") {
+      await bidirectional_search();
+      setRunning(false);
+      return;
+
     }
 
     stepsBeforeExecution(closed_nodes);
     await stepsAfterExecution(closed_nodes);
     setRunning(false)
+
   }
   const stopAlgorithm = () => {
     console.log("stop pressed wantStop=", wantStop);
@@ -326,7 +297,7 @@ function App() {
 
 
         <Dropdown options={algorithmOptions} default={"Search Algorithm"}
-          dropDownValueChanged={(value) =>setAlgorithm(value)}
+          dropDownValueChanged={(value) => setAlgorithm(value)}
         />
         {isRunning && (
           <button className="startButton running" onClick={() => stopAlgorithm()}>Running {!isRunning && chosenAlgorithm}</button>
