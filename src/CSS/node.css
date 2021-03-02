@@ -9,6 +9,16 @@
     background-color: whitesmoke;
     margin: 1em 1em 0 1em;
 }
+
+.bomb{
+    border: 0.5px solid;
+    width: 25px;
+    height: 25px;
+    display: table-cell;
+    background-image:url(bomb.svg);
+    margin: 1em 1em 0 1em;
+}
+
 .wall{
     background-image:url(star.svg);
     border: 0.5px solid;

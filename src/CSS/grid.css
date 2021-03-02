@@ -26,6 +26,8 @@
     padding: 0.35em;
     padding-left: 0.8em;
     padding-right: 0.8em;
+    display: flex;
+    align-items: center;
 }
 .startButton{
     background-color: #a7e5ff; color: rgb(0, 0, 0);

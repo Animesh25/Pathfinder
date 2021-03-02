@@ -15,6 +15,7 @@ import ColourCode from './Components/ColourCode';
 import Results from './Components/Results';
 import { clear_old_path, clear_visited_path, clearWalls, emptyGrid } from './Helpers/gridMethods';
 import { algorithmOptions, directionOptions, mazeOptions } from './Components/dropdownOptions';
+import bombSVG from './CSS/bomb.svg';
 
 
 function App() {
@@ -24,18 +25,20 @@ function App() {
   const [endLoc, setEndLoc] = useState([5, 15]);
   // variables for dragging and dropping
   const [MouseDown, setMouseDown] = useState(false);
+  const [bombDrag, setBombDrag] = useState(false);
   const [startDrag, setStartDrag] = useState(false);
   const [endDrag, setEndDrag] = useState(false);
   //variables for algorithm execution
   const [isRunning, setRunning] = useState(false);
-  const [wantStop, setStop] = useState(false);
+
   const [gridPath, setPath] = useState([]);
   const [visitedPath, setVisited] = useState([]);
   const [chosenAlgorithm, setAlgorithm] = useState("");
   const [chosenDirection, setDirection] = useState("");
   const [startTime, setStartTime] = useState(0);
+  // bomb node
+  const [bombLoc, setBombLoc] = useState([9,9]);
 
-  
 
 
   useEffect(() => {
@@ -51,17 +54,13 @@ function App() {
       grid.push([]);
       for (let x = 0; x < COLS; x++) {
         grid[y].push(
-          <Node/>
+          <Node />
         );
       }
     }
-    grid[startLoc[0]][startLoc[1]] = <Node
-      isStart={true}
-    />;
-    grid[endLoc[0]][endLoc[1]] = <Node
-      isEnd={true}
-
-    />;
+    grid[startLoc[0]][startLoc[1]] = <Node isStart={true} />;
+    grid[endLoc[0]][endLoc[1]] = <Node isEnd={true} />;
+    if (bombLoc.length>0) grid[bombLoc[0]][bombLoc[1]] = <Node isBomb={true} />;
 
     return grid;
   }
@@ -79,26 +78,29 @@ function App() {
     else if (x === endLoc[0] && y === endLoc[1]) {
       setEndDrag(true);
     }
+    else if (x === bombLoc[0] && y === bombLoc[1]) {
+      setBombDrag(true);
+    }
     else {
       let newGrid = Grid.slice();
-      if (newGrid[x][y].props.isStart || newGrid[x][y].props.isEnd) return;
+      if (newGrid[x][y].props.isStart || newGrid[x][y].props.isEnd || newGrid[x][y].props.isBomb) return;
       newGrid[x][y] =
         <Node
           key={y}
           isWall={!newGrid[x][y].props.isWall} />
       setGrid(newGrid)
     }
-
   }
 
   //if moving start or end we want to retain previous wall position
   const handleMouseEnter = (x, y) => {
     if (x === null || y === null || x < 0 || y < 0) return;
+    if (x === bombLoc[0] && y === bombLoc[1]) return;
     if (x === endLoc[0] && y === endLoc[1]) return;
     if (x === startLoc[0] && y === startLoc[1]) return;
     if (MouseDown) {
       let newGrid = Grid.slice();
-      if (!startDrag && !endDrag) {
+      if (!startDrag && !endDrag && !bombDrag) {
         newGrid[x][y] =
           <Node
             key={y}
@@ -123,7 +125,7 @@ function App() {
             isEnd={true}
             isWall={newGrid[x][y].props.isWall}
 
-            />
+          />
         newGrid[endLoc[0]][endLoc[1]] = <Node
           isWall={newGrid[endLoc[0]][endLoc[1]].props.isWall}
 
@@ -132,6 +134,18 @@ function App() {
         setEndLoc([x, y])
 
 
+      }
+      else if (bombDrag) {
+        newGrid[x][y] =
+          <Node
+            key={y}
+            isBomb={true}
+            isWall={newGrid[x][y].props.isWall}
+          />
+        newGrid[bombLoc[0]][bombLoc[1]] = <Node
+          isWall={newGrid[bombLoc[0]][bombLoc[1]].props.isWall}
+        />;
+        setBombLoc([x, y])
       }
       setGrid(newGrid)
     }
@@ -143,6 +157,7 @@ function App() {
     if (x === null || y === null || x < 0 || y < 0) return;
     setStartDrag(false);
     setEndDrag(false);
+    setBombDrag(false);
   }
 
 
@@ -156,7 +171,7 @@ function App() {
     stepsBeforeExecution(closed_nodes);
     await draw_path_helper(closed_nodes, 1, "visited");
     let biPath = await findPathBidirectional(closed_nodes, intersect);
-    setPath(biPath.slice(0,biPath.length-1));
+    setPath(biPath.slice(0, biPath.length - 1));
     // console.log("Find path from closed=", biPath);
     await draw_path_helper(biPath, 1, "path");
 
@@ -285,6 +300,8 @@ function App() {
         <Dropdown options={mazeOptions} default={"Select Maze"}
           dropDownValueChanged={(value) => createWalls(value)}
         />
+        <button className="button" onClick={() => { setBombLoc([6, 6])}}> <img src={bombSVG} alt="Bomb Logo" />Add Bomb</button>
+
         <button className="button" onClick={() => give2dArray()}>Give 2d Arr</button>
       </div>
 
@@ -296,6 +313,7 @@ function App() {
                 return (
                   <Node
                     key={xIndex}
+                    isBomb={node.props.isBomb}
                     isWall={node.props.isWall}
                     isEnd={node.props.isEnd}
                     isPath={node.props.isPath}
@@ -313,7 +331,7 @@ function App() {
         })}
         <div className={"bottomContainer"}>
 
-          <Results chosenAlgorithm={chosenAlgorithm} startTime={startTime} content={gridPath} />
+          <Results chosenAlgorithm={chosenAlgorithm} startTime={startTime} content={gridPath} expanded={visitedPath} />
           <ColourCode />
         </div>
 

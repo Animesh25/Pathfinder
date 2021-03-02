@@ -12,7 +12,7 @@ export default function Results(props) {
         else if (props.content.length !== 0) {
             const timeTaken=Math.round((performance.now() - props.startTime)/1000 * 100) / 100
             
-            setBody(body + '\n'+props.chosenAlgorithm+' Algorithm & Path Length = ' + props.content.length + " & Time Taken = " + timeTaken+" seconds")
+            setBody(body + '\n'+props.chosenAlgorithm+' Algorithm    |    Nodes Expanded = ' + props.expanded.length+'  |    Final Path Length = ' + props.content.length + "    |    Time Taken = " + timeTaken+" seconds")
         }
 
     }, [props.content])

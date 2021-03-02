@@ -12,13 +12,15 @@ function Node(props) {
     setEnd(props.isEnd)
     setPath(props.isPath)
     setVisited(props.isVisited)
-  }, [props.isWall, props.isStart, props.isEnd, props.isPath, props.isVisited])
+    setBomb(props.isBomb)
+  }, [props.isWall, props.isStart, props.isEnd, props.isPath, props.isVisited, props.isBomb])
 
   const [isWall, setWall] = useState(false);
   const [isStart, setStart] = useState(false);
   const [isEnd, setEnd] = useState(false);
   const [isPath, setPath] = useState(false);
   const [isVisited, setVisited] = useState(false);
+  const [isBomb, setBomb] = useState(false);
 
 
   let className = "node";
@@ -27,6 +29,9 @@ function Node(props) {
   }
   else if (isStart === true) {
     className = "start";
+  }
+  else if (isBomb === true) {
+    className = "bomb";
   }
   else if (isWall === true) {
     className = "wall";
@@ -41,7 +46,7 @@ function Node(props) {
     className = "node";
   }
 
-  let mainBody=<div className={className} />;
+  let mainBody = <div className={className} />;
   if (props.handleMouseEnter === undefined) {
     mainBody = <div className={className} />
   }
