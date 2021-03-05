@@ -74,7 +74,7 @@ export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid,chosenDire
             unvisited=update_cost(neighbour, cost, node_lowest_cost, unvisited);
 
         }
-        // unvisited.remove(node_lowest_cost);
+        unvisited.remove(node_lowest_cost);
         // unvisited = remove_from_unvisited(node_lowest_cost, unvisited);
         visited.push(node_lowest_cost);
         // console.log("visited=" + visited);
