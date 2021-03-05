@@ -53,30 +53,7 @@ export const clear_visited_path = (visitedPath, Grid) => {
 }
 
 
-// export const setStart = () => {
-//     const newGrid = Grid.slice();// doing a deep copy of the array
-//     newGrid[startLoc[0]][startLoc[1]] = <Node
-//       isWall={false}
-//       isStart={true}
-//       isEnd={false}
-//       isPath={false}
-//       isVisited={false}
-//       // handleMouseDown={() => handleMouseDown(x, y)}
-//       // handleMouseEnter={() => handleMouseEnter(x, y)}
-//       // handleMouseUp={() => handleMouseUp(x, y)}
-//     />;
-//     newGrid[endLoc[0]][endLoc[1]] = <Node
-//       isWall={false}
-//       isStart={false}
-//       isPath={false}
-//       isVisited={false}
-//       isEnd={true}
-//       // handleMouseDown={() => handleMouseDown(x, y)}
-//       // handleMouseEnter={() => handleMouseEnter(x, y)}
-//       // handleMouseUp={() => handleMouseUp(x, y)}
-//     />;
-//     return newGrid;
-//   }
+
 export const clearWalls = (Grid, ROWS, COLS) => {
   let grid = [];
   for (let y = 0; y < ROWS; y++) {

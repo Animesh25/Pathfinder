@@ -8,12 +8,12 @@ import { bfs } from './algorithms/breadth_first';
 import { dfs } from './algorithms/depth_first';
 import { best_first } from './algorithms/best_first';
 import { bidirectional } from './algorithms/bidirectional_search';
-import { timeout, find_path_from_closed, draw_path, findPathBidirectional } from './Helpers/path_finder';
+import { timeout, find_path_from_closed, draw_path, findPathBidirectional, createBombVisit } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
 import { makeMaze } from './Helpers/maze_creation';
 import ColourCode from './Components/ColourCode';
 import Results from './Components/Results';
-import { clear_old_path, clear_visited_path, clearWalls, emptyGrid } from './Helpers/gridMethods';
+import { clear_old_path, clear_visited_path, clearWalls, emptyGrid, setBomb, removeBomb } from './Helpers/gridMethods';
 import { algorithmOptions, directionOptions, mazeOptions } from './Components/dropdownOptions';
 import bombSVG from './CSS/bomb.svg';
 
@@ -37,11 +37,12 @@ function App() {
   const [chosenDirection, setDirection] = useState("");
   const [startTime, setStartTime] = useState(0);
   // bomb node
-  const [bombLoc, setBombLoc] = useState([9,9]);
+  const [bombLoc, setBombLoc] = useState([1]);
 
 
 
   useEffect(() => {
+
     setGrid(createGrid());
   }, []);
 
@@ -60,7 +61,7 @@ function App() {
     }
     grid[startLoc[0]][startLoc[1]] = <Node isStart={true} />;
     grid[endLoc[0]][endLoc[1]] = <Node isEnd={true} />;
-    if (bombLoc.length>0) grid[bombLoc[0]][bombLoc[1]] = <Node isBomb={true} />;
+    if (bombLoc.length > 0) grid[bombLoc[0]][bombLoc[1]] = <Node isBomb={true} />;
 
     return grid;
   }
@@ -163,17 +164,45 @@ function App() {
 
 
   const bidirectional_search = async () => {
-    const biOutput = bidirectional(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
-    let closed_nodes = biOutput[0];
-    const intersect = biOutput[1];
+    let biOutput = [], intersect;
+    if (bombLoc.length > 1) {
+      const startToBomb = bidirectional(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
+      const bombToEnd = bidirectional(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
 
-    // console.log("bi-biOutput=", biOutput);
-    stepsBeforeExecution(closed_nodes);
-    await draw_path_helper(closed_nodes, 1, "visited");
-    let biPath = await findPathBidirectional(closed_nodes, intersect);
-    setPath(biPath.slice(0, biPath.length - 1));
-    // console.log("Find path from closed=", biPath);
-    await draw_path_helper(biPath, 1, "path");
+      const firstHalf = startToBomb[0];
+      const firstIntersect = startToBomb[1];
+
+      const secondHalf = bombToEnd[0];
+      const secondHalfIntersect = bombToEnd[1];
+
+      const visitedNodes = firstHalf.concat(secondHalf);
+      stepsBeforeExecution(visitedNodes);
+      await draw_path_helper(visitedNodes, 1, "visited");
+
+      const biPathOne = await findPathBidirectional(firstHalf, firstIntersect);
+      const biPathTwo = await findPathBidirectional(secondHalf, secondHalfIntersect);
+
+      const joined = biPathOne.concat(biPathTwo);
+      setPath(joined);
+
+      await draw_path_helper(joined, 1, "path");
+
+    }
+    else {
+      biOutput = bidirectional(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+      let closed_nodes = biOutput[0];
+      intersect = biOutput[1];
+
+      // console.log("bi-biOutput=", biOutput);
+      stepsBeforeExecution(closed_nodes);
+      await draw_path_helper(closed_nodes, 1, "visited");
+      let biPath = await findPathBidirectional(closed_nodes, intersect);
+      setPath(biPath.slice(0, biPath.length - 1));
+      // console.log("Find path from closed=", biPath);
+      await draw_path_helper(biPath, 1, "path");
+    }
+
+
 
   }
 
@@ -190,7 +219,11 @@ function App() {
   const checkEndLocExists = async (closed_nodes) => {
     const lastElement = closed_nodes[closed_nodes.length - 1];
     if (lastElement[0] === endLoc[0] && lastElement[1] === endLoc[1]) {
-      await find_path_from_closed_helper(closed_nodes);
+      closed_nodes = await find_path_from_closed_helper(closed_nodes);
+      console.log("checkEndLocExists finalPath=", closed_nodes);
+      setPath(closed_nodes);
+
+      await draw_path_helper(closed_nodes, 1, "path");
     }
     else {
       setPath([]); //Necessary to trigger re-render of App
@@ -199,10 +232,8 @@ function App() {
   }
 
   const find_path_from_closed_helper = async (closed_nodes) => {
-    let path = await find_path_from_closed(closed_nodes, startLoc);;
-    setPath(path);
-
-    await draw_path_helper(path, 1, "path");
+    let path = await find_path_from_closed(closed_nodes, startLoc);
+    return path;
   }
 
   const draw_path_helper = async (path, i, type) => {
@@ -222,28 +253,60 @@ function App() {
     setRunning(true);
 
     setStartTime(performance.now());
-    let closed_nodes;
+    let closed_nodes, secondHalf = [];
     if (chosenAlgorithm === "A* Search") {
-      closed_nodes = a_star_search(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+      if (bombLoc.length > 1) {
+        closed_nodes = a_star_search(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
+        secondHalf = a_star_search(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
+        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
+      }
+      else closed_nodes = a_star_search(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+
 
     }
     else if (chosenAlgorithm === "Dijkstra") {
-      closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+      if (bombLoc.length > 1) {
+        closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
+        secondHalf = dijkstra_algorithm(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
+        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
+      }
+      else closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+
     }
     else if (chosenAlgorithm === "Breadth-First Search") {
-      closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+      if (bombLoc.length > 1) {
+        closed_nodes = bfs(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
+        secondHalf = bfs(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
+
+        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
+      }
+      else closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     }
     else if (chosenAlgorithm === "Depth-First Search") {
-      closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+      if (bombLoc.length > 1) {
+        closed_nodes = dfs(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
+        secondHalf = dfs(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
+        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
+      }
+      else closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     }
     else if (chosenAlgorithm === "Best-First Search") {
-      closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+      if (bombLoc.length > 1) {
+        closed_nodes = best_first(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
+        secondHalf = best_first(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
+        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
+      }
+      else closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     }
     else if (chosenAlgorithm === "Bidirectional search") {
       await bidirectional_search();
       setRunning(false);
       return;
 
+    }
+    console.log("closed nodes ******=", closed_nodes);
+    if (bombLoc.length > 1) {
+      closed_nodes = createBombVisit(closed_nodes, secondHalf);
     }
 
     stepsBeforeExecution(closed_nodes);
@@ -300,7 +363,13 @@ function App() {
         <Dropdown options={mazeOptions} default={"Select Maze"}
           dropDownValueChanged={(value) => createWalls(value)}
         />
-        <button className="button" onClick={() => { setBombLoc([6, 6])}}> <img src={bombSVG} alt="Bomb Logo" />Add Bomb</button>
+        {bombLoc.length > 1 && (
+          <button className="button" onClick={() => { if (bombLoc.length !== 1) { setGrid(removeBomb(Grid, bombLoc[0], bombLoc[1])); setBombLoc([6]); } }}> <img src={bombSVG} alt="Bomb Logo" />REMOVE Bomb</button>
+        )}
+        {bombLoc.length === 1 && (
+          <button className="button" onClick={() => { if (bombLoc.length === 1) { setBombLoc([6, 6]); setGrid(setBomb(Grid, 6, 6)) } }}> <img src={bombSVG} alt="Bomb Logo" />Add Bomb</button>
+        )}
+
 
         <button className="button" onClick={() => give2dArray()}>Give 2d Arr</button>
       </div>
