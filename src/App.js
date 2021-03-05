@@ -226,8 +226,8 @@ function App() {
       await draw_path_helper(closed_nodes, 1, "path");
     }
     else {
-      setPath([]); //Necessary to trigger re-render of App
-      setPath(null);
+      setPath(null); //Necessary to trigger re-render of App
+      setPath([]);
     }
   }
 
