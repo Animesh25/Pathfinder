@@ -53,6 +53,7 @@ const backTrack = (node) => {
 export const draw_path = async (Grid, path, i, type) => {
     const newGrid = Grid.slice();
     if (i > 0 && i <= path.length - 1) {
+        if(path[i]===undefined || path[i]===null) return newGrid;
         const x = path[i][0];
         const y = path[i][1];
         if (x === undefined || y === undefined) return newGrid;

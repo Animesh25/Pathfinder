@@ -33,9 +33,14 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
         const head = stack[stack.length-1];
         console.log("stack =",stack);
+        if (head === undefined) { 
+            // stack.splice(stack.length-1,1);
+            console.log("head=undefined so break"); 
+            break; 
+        }
         removed.push(head);
         stack.splice(stack.length-1,1);
-        if (head === undefined) { console.log("head=undefined so break"); break; }
+        
 
         let neighbours;
 
@@ -73,6 +78,8 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
 
     }
+    
+    console.log("dfs returns=",removed);
     return removed;
 
 
@@ -102,58 +109,7 @@ const remove_from_unvisited = (node, unvisited) => {
     return unvisited;
 }
 
-const getNeighbours = (node, ROWS, COLS) => {
-    // node=node.value
-    console.log("row in get neigbours=", ROWS);
-    let neighbours = [];
-    // console.log("niehgbours func node=",node.value)
-    //TOP
-    if (node[0] > 0) {
-        neighbours.push([node[0] - 1, node[1]]);
-        //Top Left
-        if (node[1] > 0) {
-            neighbours.push([node[0] - 1, node[1] - 1]);
-        }
-    }
-    //LEFT
-    if (node[1] > 0) {
-        neighbours.push([node[0], node[1] - 1]);
-        //Bottom Left
-        if (node[0] < ROWS - 1) {
-            neighbours.push([node[0] + 1, node[1] - 1]);
-        }
-    }
-    //BOTTOM
-    if (node[0] < ROWS - 1) {
-        neighbours.push([node[0] + 1, node[1]]);
-        if (node[1] < COLS - 1) {
-            neighbours.push([node[0] + 1, node[1] + 1]);
-        }
-    }
-    //RIGHT
-    if (node[1] < COLS - 1) {
-        neighbours.push([node[0], node[1] + 1]);
-        if (node[0] > 0) {
-            neighbours.push([node[0] - 1, node[1] + 1]);
-        }
-    }
-    //[top,left,bottom,right]
-    console.log("neibours of:",node,"   =",neighbours);
-    return neighbours;
 
-}
-const distance_from_start = (node, startLoc) => {
-    const x = Math.abs(node[0] - startLoc[0]);
-    const y = Math.abs(node[1] - startLoc[1]);
-    return ((x * x) + (y * y))
-}
-const distance_from_end = (node, endLoc) => {
-    // console.log("distance end====================================", node, "  endLoc=", endLoc);
-    const x = Math.abs(node[0] - endLoc[0]);
-    const y = Math.abs(node[1] - endLoc[1]);
-    return ((x * x) + (y * y))
-
-}
 
 
 const contains = (discovered_nodes, node) => {
