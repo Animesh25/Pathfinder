@@ -61,7 +61,7 @@ export const best_first = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirection) 
                 open_nodes.add([neighbour[0], neighbour[1], h_score, node_lowest_cost]);
             }
         }
-
+        open_nodes.remove(node_lowest_cost);
         if (!contains(closed_nodes, node_lowest_cost)) {
             closed_nodes.push(node_lowest_cost);
         }
