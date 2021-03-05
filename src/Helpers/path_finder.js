@@ -87,7 +87,7 @@ export const createBombVisit = (firstList, secondList) => {
     console.log("secondList=", secondList);
     console.log("firstList*=", firstList);
 
-    secondList.shift();
+    // secondList.shift();
     // secondList[secondList.length - 1][secondList[0].length - 1] = firstList[firstList.length - 1];
     secondList[0][secondList[0].length - 1] = firstList[firstList.length - 1];
     const finalList = firstList.concat(secondList);
