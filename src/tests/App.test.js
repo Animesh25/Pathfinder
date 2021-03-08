@@ -6,7 +6,7 @@ import { isTSAnyKeyword } from '@babel/types';
 import renderer from 'react-test-renderer';
 import { act } from 'react-dom/test-utils';
 import Node from '../Components/Node';
-import { timeout, find_path_from_closed, draw_path } from '../Helpers/path_finder';
+import { timeout, findPathFromClosed, drawPath } from '../Helpers/path_finder';
 
 
 
@@ -87,7 +87,7 @@ describe("A* tests",()=>{
         endLoc=[5,15];
         const findPath_mock = jest.spyOn(a_star, "findPath");
         const result = a_star.findPath(ROWS, COLS, startLoc, endLoc, grid);
-        const path = await find_path_from_closed(result, startLoc);
+        const path = await findPathFromClosed(result, startLoc);
         expect(path.length).toBe(11);
 
         findPath_mock.mockRestore();
@@ -98,7 +98,7 @@ describe("A* tests",()=>{
         endLoc=[5,6];
         const findPath_mock = jest.spyOn(a_star, "findPath");
         const result = a_star.findPath(ROWS, COLS, startLoc, endLoc, grid);
-        const path = await find_path_from_closed(result, startLoc);
+        const path = await findPathFromClosed(result, startLoc);
         expect(path.length).toBe(2);
 
         findPath_mock.mockRestore();
@@ -108,7 +108,7 @@ describe("A* tests",()=>{
         endLoc=[8,8];
         const findPath_mock = jest.spyOn(a_star, "findPath");
         const result = a_star.findPath(ROWS, COLS, startLoc, endLoc, grid);
-        const path = await find_path_from_closed(result, startLoc);
+        const path = await findPathFromClosed(result, startLoc);
         expect(path.length).toBe(9);
 
         findPath_mock.mockRestore();
@@ -123,7 +123,7 @@ describe("Dijkstra tests",()=>{
         endLoc=[5,15];
         const findPath_mock = jest.spyOn(dijkstra, "dijkstra_algorithm");
         const result = dijkstra.dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, grid);
-        const path = await find_path_from_closed(result, startLoc);
+        const path = await findPathFromClosed(result, startLoc);
         expect(path.length).toBe(11);
 
         findPath_mock.mockRestore();
@@ -134,7 +134,7 @@ describe("Dijkstra tests",()=>{
         endLoc=[5,6];
         const findPath_mock = jest.spyOn(dijkstra, "dijkstra_algorithm");
         const result = dijkstra.dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, grid);
-        const path = await find_path_from_closed(result, startLoc);
+        const path = await findPathFromClosed(result, startLoc);
         expect(path.length).toBe(2);
 
         findPath_mock.mockRestore();
@@ -144,7 +144,7 @@ describe("Dijkstra tests",()=>{
         endLoc=[8,8];
         const findPath_mock = jest.spyOn(dijkstra, "dijkstra_algorithm");
         const result = dijkstra.dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, grid);
-        const path = await find_path_from_closed(result, startLoc);
+        const path = await findPathFromClosed(result, startLoc);
         expect(path.length).toBe(9);
 
         findPath_mock.mockRestore();

@@ -8,13 +8,13 @@ import { bfs } from './algorithms/breadth_first';
 import { dfs } from './algorithms/depth_first';
 import { best_first } from './algorithms/best_first';
 import { bidirectional } from './algorithms/bidirectional_search';
-import { timeout, find_path_from_closed, draw_path, findPathBidirectional, createBombVisit } from './Helpers/path_finder';
+import { timeout, findPathFromClosed, drawPath, findPathBidirectional, createBombVisit } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
 import { makeMaze } from './Helpers/maze_creation';
 import ColourCode from './Components/ColourCode';
 import Results from './Components/Results';
-import { clear_old_path, clear_visited_path, clearWalls, emptyGrid, setBomb, removeBomb } from './Helpers/gridMethods';
-import { algorithmOptions, directionOptions, mazeOptions } from './Components/dropdownOptions';
+import { clear_old_path, clear_visited_path, clearWalls, emptyGrid, setBomb, removeBomb,speedSetter} from './Helpers/gridMethods';
+import { algorithmOptions, directionOptions, mazeOptions, speedOptions } from './Components/dropdownOptions';
 import bombSVG from './CSS/bomb.svg';
 
 
@@ -30,6 +30,7 @@ function App() {
   const [endDrag, setEndDrag] = useState(false);
   //variables for algorithm execution
   const [isRunning, setRunning] = useState(false);
+  const [speed,setSpeed]=useState(2);
 
   const [gridPath, setPath] = useState([]);
   const [visitedPath, setVisited] = useState([]);
@@ -177,7 +178,7 @@ function App() {
 
       const visitedNodes = firstHalf.concat(secondHalf);
       stepsBeforeExecution(visitedNodes);
-      await draw_path_helper(visitedNodes, 1, "visited");
+      await drawPathHelper(visitedNodes, 1, "visited");
 
       const biPathOne = await findPathBidirectional(firstHalf, firstIntersect);
       const biPathTwo = await findPathBidirectional(secondHalf, secondHalfIntersect);
@@ -185,7 +186,7 @@ function App() {
       const joined = biPathOne.concat(biPathTwo);
       setPath(joined);
 
-      await draw_path_helper(joined, 1, "path");
+      await drawPathHelper(joined, 1, "path");
 
     }
     else {
@@ -195,7 +196,7 @@ function App() {
 
       console.log("bi-biOutput=", biOutput);
       stepsBeforeExecution(closed_nodes);
-      await draw_path_helper(closed_nodes, 1, "visited");
+      await drawPathHelper(closed_nodes, 1, "visited");
       if (intersect === null || intersect === undefined) {
         setPath(null); //Necessary to trigger re-render of App
         setPath([]);
@@ -204,7 +205,7 @@ function App() {
       let biPath = await findPathBidirectional(closed_nodes, intersect);
       setPath(biPath.slice(0, biPath.length - 1));
       // console.log("Find path from closed=", biPath);
-      await draw_path_helper(biPath, 1, "path");
+      await drawPathHelper(biPath, 1, "path");
     }
 
 
@@ -218,17 +219,17 @@ function App() {
     setVisited(closed_nodes);
   }
   const stepsAfterExecution = async (closed_nodes) => {
-    await draw_path_helper(closed_nodes, 1, "visited");
+    await drawPathHelper(closed_nodes, 1, "visited");
     await checkEndLocExists(closed_nodes);
   }
   const checkEndLocExists = async (closed_nodes) => {
     const lastElement = closed_nodes[closed_nodes.length - 1];
     if (lastElement !== null && lastElement !== undefined && lastElement[0] === endLoc[0] && lastElement[1] === endLoc[1]) {
-      closed_nodes = await find_path_from_closed_helper(closed_nodes);
+      closed_nodes = await findPathFromClosedHelper(closed_nodes);
       console.log("checkEndLocExists finalPath=", closed_nodes);
       setPath(closed_nodes);
 
-      await draw_path_helper(closed_nodes, 1, "path");
+      await drawPathHelper(closed_nodes, 1, "path");
     }
     else {
       setPath(null); //Necessary to trigger re-render of App
@@ -236,17 +237,17 @@ function App() {
     }
   }
 
-  const find_path_from_closed_helper = async (closed_nodes) => {
-    let path = await find_path_from_closed(closed_nodes, startLoc);
+  const findPathFromClosedHelper = async (closed_nodes) => {
+    let path = await findPathFromClosed(closed_nodes, startLoc);
     return path;
   }
 
-  const draw_path_helper = async (path, i, type) => {
+  const drawPathHelper = async (path, i, type) => {
     if (i > 0 && i <= path.length - 1) {
-      let newGrid = await draw_path(Grid, path, i, type)
+      let newGrid = await drawPath(Grid, path, i, type)
       setGrid(newGrid);
-      await timeout(2);
-      await draw_path_helper(path, i + 1, type);
+      await timeout(speed);
+      await drawPathHelper(path, i + 1, type);
     }
 
 
@@ -254,7 +255,7 @@ function App() {
 
 
   const startAlgorithm = async () => {
-    if (isRunning) return;
+    if (isRunning || chosenAlgorithm==="") return;
     setRunning(true);
 
     setStartTime(performance.now());
@@ -374,8 +375,9 @@ function App() {
         {bombLoc.length === 1 && (
           <button className="button" onClick={() => { if (bombLoc.length === 1) { setBombLoc([6, 6]); setGrid(setBomb(Grid, 6, 6)) } }}> <img src={bombSVG} alt="Bomb Logo" />Add Bomb</button>
         )}
-
-
+        <Dropdown options={speedOptions} default={"very fast"}
+          dropDownValueChanged={(value) => setSpeed(speedSetter(value))}
+        />
         <button className="button" onClick={() => give2dArray()}>Give 2d Arr</button>
       </div>
 

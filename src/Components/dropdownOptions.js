@@ -7,3 +7,6 @@ export const directionOptions = [
 export const mazeOptions = [
     'Loop', 'Maze 1', 'Maze 2', 'Boxed','Small Boxed'
 ]
+export const speedOptions = [
+    'Very Slow', 'Slow', 'Medium', 'Fast','Very Fast'
+]

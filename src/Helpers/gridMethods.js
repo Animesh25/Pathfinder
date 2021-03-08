@@ -115,3 +115,11 @@ export const removeBomb = (Grid, x, y) => {
   return grid;
 
 }
+export const speedSetter=(setting)=>{
+  setting=setting.toLowerCase();
+  if(setting==="very fast") return 2;
+  else if(setting==="fast") return 50;
+  else if(setting==="medium") return 150;
+  else if(setting==="slow") return 300;
+  else if(setting==="very slow") return 400;
+}

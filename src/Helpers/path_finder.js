@@ -4,7 +4,7 @@ export function timeout(delay) {
     return new Promise(res => setTimeout(res, delay));
 }
 
-export const find_path_from_closed = async (closed_nodes, startLoc) => {
+export const findPathFromClosed = async (closed_nodes, startLoc) => {
     console.log("given=", closed_nodes);
     let path = [];
     let found_start = false;
@@ -18,7 +18,7 @@ export const find_path_from_closed = async (closed_nodes, startLoc) => {
             last = last[last.length - 1];
         }
     }
-    console.log("find_path_from_closed", path);
+    console.log("findPathFromClosed", path);
     return path;
 }
 export const findPathBidirectional = async (closed_nodes, targetNode) => {
@@ -50,7 +50,7 @@ const backTrack = (node) => {
     // console.log("backTrack from node=",node," is=",list);
     return list;
 }
-export const draw_path = async (Grid, path, i, type) => {
+export const drawPath = async (Grid, path, i, type) => {
     const newGrid = Grid.slice();
     if (i > 0 && i <= path.length - 1) {
         if(path[i]===undefined || path[i]===null) return newGrid;
