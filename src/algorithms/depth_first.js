@@ -29,7 +29,7 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
     //                 -------Node------------ | Cost | Previous
     let removed=[];
     let stack = [[startLoc[0], startLoc[1], 0, null]];
-    while (stack.length>=0 && stack.length<1000) {
+    while (stack.length>=0 && stack.length<10000) {
 
         const head = stack[stack.length-1];
         console.log("stack =",stack);
