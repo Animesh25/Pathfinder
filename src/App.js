@@ -69,6 +69,7 @@ function App() {
 
 
   const handleMouseDown = (x, y) => {
+    if (isRunning) return;
     setMouseDown(true);
     if (x === null || y === null || x < 0 || y < 0) return;
     // console.log("mouse down at", x, ",", y);
@@ -96,6 +97,7 @@ function App() {
 
   //if moving start or end we want to retain previous wall position
   const handleMouseEnter = (x, y) => {
+    if (isRunning) return;
     if (x === null || y === null || x < 0 || y < 0) return;
     if (x === bombLoc[0] && y === bombLoc[1]) return;
     if (x === endLoc[0] && y === endLoc[1]) return;
@@ -155,6 +157,7 @@ function App() {
 
 
   const handleMouseUp = (x, y) => {
+    if (isRunning) return;
     setMouseDown(false);
     if (x === null || y === null || x < 0 || y < 0) return;
     setStartDrag(false);
@@ -375,7 +378,7 @@ function App() {
         {bombLoc.length === 1 && (
           <button className="button" onClick={() => { if (bombLoc.length === 1) { setBombLoc([6, 6]); setGrid(setBomb(Grid, 6, 6)) } }}> <img src={bombSVG} alt="Bomb Logo" />Add Bomb</button>
         )}
-        <Dropdown options={speedOptions} default={"very fast"}
+        <Dropdown options={speedOptions} default={"Very Fast"}
           dropDownValueChanged={(value) => setSpeed(speedSetter(value))}
         />
         <button className="button" onClick={() => give2dArray()}>Give 2d Arr</button>
