@@ -46,25 +46,43 @@ export const best_first = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirection) 
                 return closed_nodes;
             }
 
-            if (open_nodes.contains(neighbour)) {
-                const visitedNeighbour = open_nodes.get(neighbour);
-                const visited_h_score = visitedNeighbour[visitedNeighbour.length - 2];
-                if (visited_h_score >= h_score) {
-                    open_nodes.remove(neighbour);
-                    open_nodes.add([neighbour[0], neighbour[1], h_score, node_lowest_cost]);
+            if(!contains(closed_nodes, neighbour)){
+                if(!open_nodes.contains(neighbour)){
+                    open_nodes.add([neighbour[0], neighbour[1], h_score,node_lowest_cost]);
+                }
+                else{
+                    const visitedNeighbour=open_nodes.get(neighbour);
+                    const visited_h_score=visitedNeighbour[visitedNeighbour.length-2];
+                    if(visited_h_score>h_score){
+                        // new path is better
+                        open_nodes.remove(neighbour);
+                        open_nodes.add([neighbour[0], neighbour[1], h_score,node_lowest_cost]);
+                    }
                 }
             }
-            else if (contains(closed_nodes, neighbour)) {
-                continue;
-            }
-            else {
-                open_nodes.add([neighbour[0], neighbour[1], h_score, node_lowest_cost]);
-            }
+
+
+
+
+            // if (open_nodes.contains(neighbour)) {
+            //     const visitedNeighbour = open_nodes.get(neighbour);
+            //     const visited_h_score = visitedNeighbour[visitedNeighbour.length - 2];
+            //     if (visited_h_score >= h_score) {
+            //         open_nodes.remove(neighbour);
+            //         open_nodes.add([neighbour[0], neighbour[1], h_score, node_lowest_cost]);
+            //     }
+            // }
+            // else if (contains(closed_nodes, neighbour)) {
+            //     continue;
+            // }
+            // else {
+            //     open_nodes.add([neighbour[0], neighbour[1], h_score, node_lowest_cost]);
+            // }
         }
         open_nodes.remove(node_lowest_cost);
-        if (!contains(closed_nodes, node_lowest_cost)) {
+        // if (!contains(closed_nodes, node_lowest_cost)) {
             closed_nodes.push(node_lowest_cost);
-        }
+        // }
     }
 
     return closed_nodes;
