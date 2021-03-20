@@ -14,7 +14,7 @@ contains O(N)       o(N)
 */
 
 export const a_star_search = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirection) => {
-    console.log("rows=", ROWS, " cols=", COLS, " startLoc=", startLoc, "  endloc=", endLoc, "  grid=", Grid);
+    // console.log("rows=", ROWS, " cols=", COLS, " startLoc=", startLoc, "  endloc=", endLoc, "  grid=", Grid);
 
     let open_nodes = new BinaryHeap();
     open_nodes.add([startLoc[0], startLoc[1], 0, 0, 0])
@@ -27,8 +27,8 @@ export const a_star_search = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirectio
 
         if (node_lowest_cost === undefined) break;
 
-        console.log("lowest=", node_lowest_cost);
-        console.log("chosen from", open_nodes);
+        // console.log("lowest=", node_lowest_cost);
+        // console.log("chosen from", open_nodes);
         // while(contains(closed_nodes,node_lowest_cost) && open_nodes.length()>0) node_lowest_cost=open_nodes.removeMin();
         
         let neighbours;
@@ -63,7 +63,7 @@ export const a_star_search = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirectio
             if (neighbour[0] === endLoc[0] && neighbour[1] === endLoc[1]) {
                 closed_nodes.push(node_lowest_cost);
                 closed_nodes.push([neighbour[0], neighbour[1], h_score, g_score, f_score,node_lowest_cost]);
-                console.log("end found at:", endLoc);
+                // console.log("end found at:", endLoc);
                 return closed_nodes;
             }
             

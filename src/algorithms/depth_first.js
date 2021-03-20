@@ -3,7 +3,6 @@ import {getFourNeighbours,getEightNeighbours} from './common_methods/methods';
 
 export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
-
     /*
     create unvisited list
         Node | Cost (from start) | Previous node
@@ -29,13 +28,12 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
     //                 -------Node------------ | Cost | Previous
     let removed=[];
     let stack = [[startLoc[0], startLoc[1], 0, null]];
-    while (stack.length>=0 && stack.length<10000) {
+    while (stack.length>=0 && stack.length<100000) {
 
         const head = stack[stack.length-1];
-        console.log("stack =",stack);
+        // console.log("stack =",stack);
         if (head === undefined) { 
             // stack.splice(stack.length-1,1);
-            console.log("head=undefined so break"); 
             break; 
         }
         removed.push(head);
@@ -79,7 +77,7 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
     }
     
-    console.log("dfs returns=",removed);
+    // console.log("dfs returns=",removed);
     return removed;
 
 

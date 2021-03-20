@@ -44,7 +44,7 @@ export const dijkstra_algorithm = (ROWS, COLS, startLoc, endLoc, Grid,chosenDire
         }
         
         
-        console.log("low=",node_lowest_cost);
+        // console.log("low=",node_lowest_cost);
         let neighbours;
         if (node_lowest_cost === undefined) { console.log("node_lowest=undefined so break"); break; }
         

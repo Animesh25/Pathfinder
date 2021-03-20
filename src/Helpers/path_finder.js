@@ -5,9 +5,9 @@ export function timeout(delay) {
 }
 
 export const findPathFromClosed = async (closed_nodes, startLoc) => {
-    console.log("given=", closed_nodes);
     let path = [];
     let found_start = false;
+    
     let last = closed_nodes[closed_nodes.length - 1];
     while (found_start === false) {
         path.unshift(last);
@@ -18,7 +18,7 @@ export const findPathFromClosed = async (closed_nodes, startLoc) => {
             last = last[last.length - 1];
         }
     }
-    console.log("findPathFromClosed", path);
+    // console.log("findPathFromClosed", path);
     return path;
 }
 export const findPathBidirectional = async (closed_nodes, targetNode) => {
@@ -83,9 +83,10 @@ export const drawPath = async (Grid, path, i, type) => {
 
 
 }
+
 export const createBombVisit = (firstList, secondList) => {
-    console.log("secondList=", secondList);
-    console.log("firstList*=", firstList);
+    // console.log("secondList=", secondList);
+    // console.log("firstList*=", firstList);
 
     // secondList.shift();
     // secondList[secondList.length - 1][secondList[0].length - 1] = firstList[firstList.length - 1];
