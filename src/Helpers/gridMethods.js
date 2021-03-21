@@ -61,9 +61,6 @@ export const clearWalls = (Grid, ROWS, COLS) => {
     for (let x = 0; x < COLS; x++) {
       grid[y].push(
         <Node
-          // handleMouseDown={() => handleMouseDown(x, y)}
-          // handleMouseEnter={() => handleMouseEnter(x, y)}
-          // handleMouseUp={() => handleMouseUp(x, y)}
           isWall={false}
           isPath={false}
           isVisited={false}

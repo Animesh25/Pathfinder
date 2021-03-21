@@ -8,6 +8,7 @@ import { act } from 'react-dom/test-utils';
 import Node from '../Components/Node';
 import { timeout, findPathFromClosed, drawPath, findPathBidirectional } from '../Helpers/path_finder';
 import { makeMaze } from '../Helpers/maze_creation';
+import {clearWalls,setBomb,removeBomb,clear_visited_path} from '../Helpers/gridMethods';
 
 
 
@@ -19,8 +20,6 @@ const best_first = require("../algorithms/best_first");
 const bidirectional_search = require("../algorithms/bidirectional_search");
 
 
-const app = require("../App");
-const pathfinder = require("../Helpers/path_finder");
 
 
 it("renders everything without crashing", () => {
@@ -95,7 +94,7 @@ const runAlgorithm = async (name, startLoc, endLoc, grid, neighbourEval) => {
         const intersect = result[1];
         let path = await findPathBidirectional(closed_nodes, intersect);
         return path;
-        
+
     }
     const path = await findPathFromClosed(result, startLoc);
     return path;
@@ -106,54 +105,54 @@ describe("A* tests", () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "maze 1");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("a*", startLoc, endLoc, newGrid, "8");
         expect(path.length).toBe(19);
 
-        
+
     });
     it("A* test - Horizontal", async () => {
-        grid=createGrid();
+        grid = createGrid();
         startLoc = [5, 5];
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("a*", startLoc, endLoc, grid, "4");
         expect(path.length).toBe(11);
 
-        
+
     });
 
 
     it("A* test - Horizontal close", async () => {
         startLoc = [5, 5];
         endLoc = [5, 6];
-        
+
         let path = await runAlgorithm("a*", startLoc, endLoc, grid, "4");
         expect(path.length).toBe(2);
 
-        
+
     });
     it("A* test - Diagonal", async () => {
         startLoc = [0, 0]
         endLoc = [8, 8];
-        
+
         let path = await runAlgorithm("a*", startLoc, endLoc, grid, "8");
         expect(path.length).toBe(10);
 
-        
+
     });
-    
+
     it("A* test - No Path", async () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "small boxed");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("a*", startLoc, endLoc, newGrid, "8");
         const length = path.length;
         const containsEnd = (path[length - 1][0] === endLoc[0]) && (path[length - 1][1] === endLoc[1])
         expect(containsEnd).toBe(false);
 
-        
+
     });
 })
 describe("Greedy Best First  tests", () => {
@@ -172,11 +171,11 @@ describe("Greedy Best First  tests", () => {
         grid = createGrid();
         startLoc = [5, 5];
         endLoc = [5, 15];
-        
+
         const path = await runAlgorithm("best first", startLoc, endLoc, grid, "4");
         expect(path.length).toBe(11);
 
-        
+
     });
 
     it("Greedy Best First test - Horizontal close", async () => {
@@ -191,23 +190,23 @@ describe("Greedy Best First  tests", () => {
     it("Greedy Best First test - Diagonal", async () => {
         startLoc = [0, 0]
         endLoc = [8, 8];
-        
+
         const path = await runAlgorithm("best first", startLoc, endLoc, grid, "8");
         expect(path.length).toBe(10);
 
-        
+
     });
     it("Greedy Best First test - No Path", async () => {
         grid = makeMaze(startLoc, endLoc, grid, "small boxed");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("best first", startLoc, endLoc, grid, "8");
         const length = path.length;
         const containsEnd = (path[length - 1][0] === endLoc[0]) && (path[length - 1][1] === endLoc[1])
         expect(containsEnd).toBe(false);
 
-        
+
     });
 })
 
@@ -217,53 +216,53 @@ describe("Dijkstra tests", () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "maze 1");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("dijkstra", startLoc, endLoc, newGrid, "8");
         expect(path.length).toBe(19);
 
-        
+
     });
     it("Dijkstra test - Horizontal", async () => {
         grid = createGrid();
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("dijkstra", startLoc, endLoc, grid, "4");
         expect(path.length).toBe(11);
 
-        
+
     });
 
     it("Dijkstra test - Horizontal close", async () => {
         startLoc = [5, 5];
         endLoc = [5, 6];
-        
+
         let path = await runAlgorithm("dijkstra", startLoc, endLoc, grid, "8");
         expect(path.length).toBe(2);
 
-        
+
     });
     it("Dijkstra test - Diagonal", async () => {
         startLoc = [0, 0]
         endLoc = [8, 8];
-        
+
         let path = await runAlgorithm("dijkstra", startLoc, endLoc, grid, "8");
         expect(path.length).toBe(9);
 
-        
+
     });
 
     it("Dijkstra test - No Path", async () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "small boxed");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("dijkstra", startLoc, endLoc, newGrid, "8");
         const length = path.length;
         const containsEnd = (path[length - 1][0] === endLoc[0]) && (path[length - 1][1] === endLoc[1])
         expect(containsEnd).toBe(false);
 
-        
+
     });
 })
 
@@ -273,52 +272,52 @@ describe("Breadth first search tests", () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "maze 1");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("breadth first", startLoc, endLoc, newGrid, "8");
         expect(path.length).toBe(19);
 
-        
+
     });
     it("Breadth first search test - Horizontal", async () => {
         grid = createGrid();
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("breadth first", startLoc, endLoc, grid, "8");
         expect(path.length).toBe(11);
 
-        
+
     });
 
     it("Breadth first search test - Horizontal close", async () => {
         startLoc = [5, 5];
         endLoc = [5, 6];
-        
+
         let path = await runAlgorithm("breadth first", startLoc, endLoc, grid, "4");
         expect(path.length).toBe(2);
 
-        
+
     });
     it("Breadth first search test - Diagonal", async () => {
         startLoc = [0, 0]
         endLoc = [8, 8];
-        
+
         let path = await runAlgorithm("breadth first", startLoc, endLoc, grid, "8");
         expect(path.length).toBe(9);
 
-        
+
     });
     it("Breadth first search test - No Path", async () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "small boxed");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("breadth first", startLoc, endLoc, newGrid, "8");
         const length = path.length;
         const containsEnd = (path[length - 1][0] === endLoc[0]) && (path[length - 1][1] === endLoc[1])
         expect(containsEnd).toBe(false);
 
-        
+
     });
 })
 describe("Depth first search tests", () => {
@@ -327,14 +326,14 @@ describe("Depth first search tests", () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "maze 1");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        
+
         let path = await runAlgorithm("depth first", startLoc, endLoc, newGrid, "8");
         expect(path.length).toBe(55);
 
-        
+
     });
     it("Depth first search test - Horizontal", async () => {
-        grid=createGrid();
+        grid = createGrid();
         startLoc = [5, 5]
         endLoc = [5, 15];
         // 
@@ -384,12 +383,12 @@ describe("Bidirectional search tests", () => {
         endLoc = [5, 15];
         // const findPath_mock = jest.spyOn(bidirectional_search, "bidirectional");
         let path = await runAlgorithm("bidirectional", startLoc, endLoc, newGrid, "8");
-        expect(path.length-1).toBe(19);
+        expect(path.length - 1).toBe(19);
 
         // 
     });
     it("Bidirectional search test - Horizontal", async () => {
-        grid=createGrid();
+        grid = createGrid();
         startLoc = [5, 5]
         endLoc = [5, 15];
         // const findPath_mock = jest.spyOn(bidirectional_search, "bidirectional");
@@ -429,5 +428,6 @@ describe("Bidirectional search tests", () => {
         // 
     });
 })
+
 
 
