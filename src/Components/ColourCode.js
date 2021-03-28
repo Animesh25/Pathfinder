@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Node from './Node';
 import '../CSS/grid.css';
 
@@ -64,6 +64,19 @@ export default function ColourCode(props) {
                     
                 />
                 <h3>Path</h3>
+            </div>
+            <div className="key">
+                <Node
+                    key={-1}
+                    isWall={false}
+                    isEnd={false}
+                    isPath={false}
+                    isVisited={false}
+                    isStart={false}
+                    isBomb={true}
+                    
+                />
+                <h4>Bomb Node</h4>
             </div>
 
         </div>

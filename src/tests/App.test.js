@@ -1,14 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../App';
-import { isTSAnyKeyword } from '@babel/types';
-// import {getQueriesForElement} from '@testing-library/dom';
-import renderer from 'react-test-renderer';
-import { act } from 'react-dom/test-utils';
+
 import Node from '../Components/Node';
-import { timeout, findPathFromClosed, drawPath, findPathBidirectional } from '../Helpers/path_finder';
+import {findPathFromClosed, findPathBidirectional } from '../Helpers/path_finder';
 import { makeMaze } from '../Helpers/maze_creation';
-import {clearWalls,setBomb,removeBomb,clear_visited_path} from '../Helpers/gridMethods';
 
 
 
@@ -105,21 +101,16 @@ describe("A* tests", () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "maze 1");
         startLoc = [5, 5]
         endLoc = [5, 15];
-
         let path = await runAlgorithm("a*", startLoc, endLoc, newGrid, "8");
         expect(path.length).toBe(19);
-
 
     });
     it("A* test - Horizontal", async () => {
         grid = createGrid();
         startLoc = [5, 5];
         endLoc = [5, 15];
-
         let path = await runAlgorithm("a*", startLoc, endLoc, grid, "4");
         expect(path.length).toBe(11);
-
-
     });
 
 
@@ -381,7 +372,7 @@ describe("Bidirectional search tests", () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "maze 1");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        // const findPath_mock = jest.spyOn(bidirectional_search, "bidirectional");
+
         let path = await runAlgorithm("bidirectional", startLoc, endLoc, newGrid, "8");
         expect(path.length - 1).toBe(19);
 
@@ -391,7 +382,7 @@ describe("Bidirectional search tests", () => {
         grid = createGrid();
         startLoc = [5, 5]
         endLoc = [5, 15];
-        // const findPath_mock = jest.spyOn(bidirectional_search, "bidirectional");
+
         let path = await runAlgorithm("bidirectional", startLoc, endLoc, grid, "4");
         expect(path.length - 1).toBe(11);
 
@@ -401,7 +392,7 @@ describe("Bidirectional search tests", () => {
     it("Bidirectional search test - Horizontal close", async () => {
         startLoc = [5, 5];
         endLoc = [5, 6];
-        // const findPath_mock = jest.spyOn(bidirectional_search, "bidirectional");
+
         let path = await runAlgorithm("bidirectional", startLoc, endLoc, grid, "4");
         expect(path.length).toBe(3);
 
@@ -410,7 +401,6 @@ describe("Bidirectional search tests", () => {
     it("Bidirectional search test - Diagonal", async () => {
         startLoc = [5, 5]
         endLoc = [1, 32];
-        // const findPath_mock = jest.spyOn(bidirectional_search, "bidirectional");
         let path = await runAlgorithm("bidirectional", startLoc, endLoc, grid, "8");
         expect(path.length - 1).toBe(28);
         // 
@@ -419,13 +409,11 @@ describe("Bidirectional search tests", () => {
         const newGrid = makeMaze(startLoc, endLoc, grid, "small boxed");
         startLoc = [5, 5]
         endLoc = [5, 15];
-        // const findPath_mock = jest.spyOn(bidirectional_search, "bidirectional");
         let path = await runAlgorithm("bidirectional", startLoc, endLoc, newGrid, "8");
         const length = path.length;
         const containsEnd = (path[length - 1][0] === endLoc[0]) && (path[length - 1][1] === endLoc[1])
         expect(containsEnd).toBe(false);
 
-        // 
     });
 })
 

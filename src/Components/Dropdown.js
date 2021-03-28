@@ -11,10 +11,15 @@ function Dropdown(props) {
     const [mainValue, setMainValue] = useState(props.default);
 
     let menuOptions=[];
+    /*
+        Creates the dropdown menu
+    */
     for(const value of options){
         menuOptions.push(<p key={value} onClick={()=>changeValue(value)} className={"item"}>{value}</p>)
     }
-    
+    /*
+        Called when the user selects a value from the dropdown meny
+    */
     const changeValue=(value)=>{
         setMainValue(value);
         props.dropDownValueChanged(value);

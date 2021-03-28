@@ -7,8 +7,8 @@ function Node(props) {
   const y = props.y;
 
   useEffect(() => {
-    setWall(props.isWall) //> I'm dispatching an action here.
-    setStart(props.isStart) //> I'm dispatching an action here.
+    setWall(props.isWall) 
+    setStart(props.isStart) 
     setEnd(props.isEnd)
     setPath(props.isPath)
     setVisited(props.isVisited)

@@ -16,7 +16,7 @@ export const clearEverything = (ROWS, COLS, grid) => {
   }
   return grid;
 }
-export const clear_old_path = (path, Grid) => {
+export const clearOldPath = (path, Grid) => {
   if (path === null || path === undefined) return;
   const newGrid = Grid.slice();
 
@@ -35,7 +35,8 @@ export const clear_old_path = (path, Grid) => {
   }
   return newGrid;
 }
-export const clear_visited_path = (visitedPath, Grid) => {
+
+export const clearVisitedPath = (visitedPath, Grid) => {
   const newGrid = Grid.slice();
   for (let i = 1; i < visitedPath.length; i++) {
     const x = visitedPath[i][0];
@@ -74,6 +75,9 @@ export const clearWalls = (Grid, ROWS, COLS) => {
   return grid
 
 }
+/*
+  Creates a new grid
+*/
 export const emptyGrid = (Grid, ROWS, COLS) => {
   let grid = [];
   for (let y = 0; y < ROWS; y++) {
@@ -102,6 +106,7 @@ export const setBomb = (Grid, x, y) => {
   return grid;
 
 }
+
 export const removeBomb = (Grid, x, y) => {
   let grid = Grid.slice();
   grid[x][y] =

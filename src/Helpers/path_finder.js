@@ -4,6 +4,9 @@ export function timeout(delay) {
     return new Promise(res => setTimeout(res, delay));
 }
 
+/*
+  Backtracks from the end of the list to find the start node and keeps a track using the path array.
+*/
 export const findPathFromClosed = async (closed_nodes, startLoc) => {
     let path = [];
     let found_start = false;
@@ -18,13 +21,14 @@ export const findPathFromClosed = async (closed_nodes, startLoc) => {
             last = last[last.length - 1];
         }
     }
-    // console.log("findPathFromClosed", path);
     return path;
 }
+
+/*
+  A different version for the findPath function to accomodate the bidirectional search
+  it outputs the final path 
+*/
 export const findPathBidirectional = async (closed_nodes, targetNode) => {
-    // 1. Find 1st intersect
-    //Backtrack from it
-    let path = [];
     let intersectOne;
     for (let i = 0; i < closed_nodes.length; i++) {
         const node = closed_nodes[i];
@@ -35,11 +39,12 @@ export const findPathBidirectional = async (closed_nodes, targetNode) => {
     }
     let one = backTrack(intersectOne);
     let two = backTrack(targetNode);
-
-    // let pathA=
-
     return one.concat(two);
 }
+
+/*
+  Used to backtrack for the findPathBidirectional function
+*/
 const backTrack = (node) => {
     let list = [node];
     let iterator = node;
@@ -47,9 +52,12 @@ const backTrack = (node) => {
         list.push(iterator[3]);
         iterator = iterator[3];
     }
-    // console.log("backTrack from node=",node," is=",list);
     return list;
 }
+
+/*
+  Sets either visited or path props for a given node to be true
+*/
 export const drawPath = async (Grid, path, i, type) => {
     const newGrid = Grid.slice();
     if (i > 0 && i <= path.length - 1) {
@@ -84,16 +92,14 @@ export const drawPath = async (Grid, path, i, type) => {
 
 }
 
-export const createBombVisit = (firstList, secondList) => {
-    // console.log("secondList=", secondList);
-    // console.log("firstList*=", firstList);
 
-    // secondList.shift();
-    // secondList[secondList.length - 1][secondList[0].length - 1] = firstList[firstList.length - 1];
+/*
+  Creates the visited list for the bomb node.
+*/
+export const createBombVisit = (firstList, secondList) => {
     secondList[0][secondList[0].length - 1] = firstList[firstList.length - 1];
     const finalList = firstList.concat(secondList);
-    
-    
+
     return finalList;
     
 }

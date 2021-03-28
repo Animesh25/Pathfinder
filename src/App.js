@@ -13,7 +13,7 @@ import Dropdown from './Components/Dropdown';
 import { makeMaze } from './Helpers/maze_creation';
 import ColourCode from './Components/ColourCode';
 import Results from './Components/Results';
-import { clear_old_path, clear_visited_path, clearWalls, emptyGrid, setBomb, removeBomb,speedSetter} from './Helpers/gridMethods';
+import { clearOldPath, clearVisitedPath, clearWalls, emptyGrid, setBomb, removeBomb,speedSetter} from './Helpers/gridMethods';
 import { algorithmOptions, directionOptions, mazeOptions, speedOptions } from './Components/dropdownOptions';
 import bombSVG from './CSS/bomb.svg';
 
@@ -50,6 +50,10 @@ function App() {
   const ROWS = 18;
   const COLS = 55;
 
+  /**
+   * This function creates a new grid and sets the start and end nodes.
+   * 
+   */
   const createGrid = () => {
     let grid = [];
     for (let y = 0; y < ROWS; y++) {
@@ -67,14 +71,13 @@ function App() {
     return grid;
   }
 
-
+  /*
+  * handleMouseDown will toggle the isWall props of a given node
+  */
   const handleMouseDown = (x, y) => {
     if (isRunning) return;
     setMouseDown(true);
     if (x === null || y === null || x < 0 || y < 0) return;
-    // console.log("mouse down at", x, ",", y);
-
-    console.log("start drag-------------x,y=", x, ",", y);
     if (x === startLoc[0] && y === startLoc[1]) {
       setStartDrag(true);
     }
@@ -95,7 +98,9 @@ function App() {
     }
   }
 
-  //if moving start or end we want to retain previous wall position
+  /*
+  * This function will toggle the isWall property and ensure that the start,end and bomb nodes are moved correctly
+  */
   const handleMouseEnter = (x, y) => {
     if (isRunning) return;
     if (x === null || y === null || x < 0 || y < 0) return;
@@ -134,7 +139,6 @@ function App() {
           isWall={newGrid[endLoc[0]][endLoc[1]].props.isWall}
 
         />;
-        console.log("set wall at endloc=", endLoc);
         setEndLoc([x, y])
 
 
@@ -155,7 +159,9 @@ function App() {
     }
   }
 
-
+  /*
+  * handleMouseUp will set to false all the dragging and dropping hooks
+  */
   const handleMouseUp = (x, y) => {
     if (isRunning) return;
     setMouseDown(false);
@@ -166,7 +172,9 @@ function App() {
   }
 
 
-
+  /*
+  * bidirectional_search will call bidirectional and parse the result correctly to ensure it can be visualised on the grid.
+  */
   const bidirectional_search = async () => {
     let biOutput = [], intersect;
     if (bombLoc.length > 1) {
@@ -197,7 +205,6 @@ function App() {
       let closed_nodes = biOutput[0];
       intersect = biOutput[1];
 
-      console.log("bi-biOutput=", biOutput);
       stepsBeforeExecution(closed_nodes);
       await drawPathHelper(closed_nodes, 1, "visited");
       if (intersect === null || intersect === undefined) {
@@ -207,7 +214,6 @@ function App() {
       }
       let biPath = await findPathBidirectional(closed_nodes, intersect);
       setPath(biPath.slice(0, biPath.length - 1));
-      // console.log("Find path from closed=", biPath);
       await drawPathHelper(biPath, 1, "path");
     }
 
@@ -215,21 +221,28 @@ function App() {
 
   }
 
-
+  /*
+    stepsBeforeExecution - Does all the pre-processing of clearing the old paths and visited nodes before the next algorithm is visualised. 
+   */
   const stepsBeforeExecution = (closed_nodes) => {
-    setGrid(clear_visited_path(visitedPath, Grid));
-    setGrid(clear_old_path(gridPath, Grid));
+    setGrid(clearVisitedPath(visitedPath, Grid));
+    setGrid(clearOldPath(gridPath, Grid));
     setVisited(closed_nodes);
   }
+  /*
+   * stepsAfterExecution runs after an algorithm has been executed and uses the output to draw the visited & final paths.
+   */
   const stepsAfterExecution = async (closed_nodes) => {
     await drawPathHelper(closed_nodes, 1, "visited");
     await checkEndLocExists(closed_nodes);
   }
+  /*
+     checkEndLocExists ensures that if the end node is not found within the closed nodes then it sets the path to an empty array
+   */
   const checkEndLocExists = async (closed_nodes) => {
     const lastElement = closed_nodes[closed_nodes.length - 1];
     if (lastElement !== null && lastElement !== undefined && lastElement[0] === endLoc[0] && lastElement[1] === endLoc[1]) {
       closed_nodes = await findPathFromClosedHelper(closed_nodes);
-      console.log("checkEndLocExists finalPath=", closed_nodes);
       setPath(closed_nodes);
 
       await drawPathHelper(closed_nodes, 1, "path");
@@ -239,12 +252,16 @@ function App() {
       setPath([]);
     }
   }
-
+  /*
+    findPathFromClosedHelper calls the findPathFromClosed function to backtrack to the start node
+   */
   const findPathFromClosedHelper = async (closed_nodes) => {
     let path = await findPathFromClosed(closed_nodes, startLoc);
     return path;
   }
-
+  /*
+     drawPathHelper recursively sets each node at the index i to either a path or visited node
+   */
   const drawPathHelper = async (path, i, type) => {
     if (i > 0 && i <= path.length - 1) {
       let newGrid = await drawPath(Grid, path, i, type)
@@ -256,7 +273,9 @@ function App() {
 
   }
 
-
+  /*
+     startAlgorithm begins the execution of the chosen algorithm
+   */
   const startAlgorithm = async () => {
     if (isRunning || chosenAlgorithm==="") return;
     setRunning(true);
@@ -267,7 +286,6 @@ function App() {
       if (bombLoc.length > 1) {
         closed_nodes = a_star_search(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
         secondHalf = a_star_search(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
-        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
       }
       else closed_nodes = a_star_search(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
 
@@ -277,7 +295,6 @@ function App() {
       if (bombLoc.length > 1) {
         closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
         secondHalf = dijkstra_algorithm(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
-        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
       }
       else closed_nodes = dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
 
@@ -286,8 +303,6 @@ function App() {
       if (bombLoc.length > 1) {
         closed_nodes = bfs(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
         secondHalf = bfs(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
-
-        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
       }
       else closed_nodes = bfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     }
@@ -295,7 +310,6 @@ function App() {
       if (bombLoc.length > 1) {
         closed_nodes = dfs(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
         secondHalf = dfs(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
-        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
       }
       else closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     }
@@ -303,7 +317,6 @@ function App() {
       if (bombLoc.length > 1) {
         closed_nodes = best_first(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
         secondHalf = best_first(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
-        // closed_nodes=createBombVisit(closed_nodes,secondHalf);
       }
       else closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     }
@@ -313,7 +326,6 @@ function App() {
       return;
 
     }
-    console.log("closed nodes ******=", closed_nodes);
     if (bombLoc.length > 1) {
       closed_nodes = createBombVisit(closed_nodes, secondHalf);
     }
@@ -324,29 +336,15 @@ function App() {
 
   }
 
-
+  /*
+    createWalls Calls the makeMaze function and sets the grid to the given maze.
+   */
   const createWalls = (value) => {
     setGrid(makeMaze(startLoc, endLoc, emptyGrid(Grid, ROWS, COLS), value));
   }
 
 
-  const give2dArray = () => {
-    let arr = [];
-    console.log("grid=", Grid[0][1]);
-    for (let i = 0; i < Grid.length; i++) {
-      arr.push([]);
-      for (let j = 0; j < Grid[i].length; j++) {
-        if (Grid[i][j].props.isWall === true) {
-          arr[i].push(1);
-        }
-        else {
-          arr[i].push(0);
-        }
-      }
-      // arr.push(subArr);
-    }
-    console.log("arr=", arr);
-  }
+  
 
 
 
@@ -354,8 +352,6 @@ function App() {
   return (
     <div className="App">
       <div className="buttonGroup">
-
-
         <Dropdown options={algorithmOptions} default={"Search Algorithm"}
           dropDownValueChanged={(value) => setAlgorithm(value)}
         />
@@ -381,7 +377,6 @@ function App() {
         <Dropdown options={speedOptions} default={"Very Fast"}
           dropDownValueChanged={(value) => setSpeed(speedSetter(value))}
         />
-        <button className="button" onClick={() => give2dArray()}>Give 2d Arr</button>
       </div>
 
       <div className="container">

@@ -1,4 +1,4 @@
-import {getFourNeighbours,getEightNeighbours} from './common_methods/methods';
+import {getFourNeighbours,getEightNeighbours,contains} from './common_methods/methods';
 
 
 export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
@@ -24,16 +24,12 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
     
     */
 
-
-    //                 -------Node------------ | Cost | Previous
     let removed=[];
     let stack = [[startLoc[0], startLoc[1], 0, null]];
     while (stack.length>=0 && stack.length<100000) {
 
         const head = stack[stack.length-1];
-        // console.log("stack =",stack);
         if (head === undefined) { 
-            // stack.splice(stack.length-1,1);
             break; 
         }
         removed.push(head);
@@ -70,74 +66,16 @@ export const dfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
             }  
 
         }
-        
-        // unvisited = remove_from_unvisited(node_lowest_cost, unvisited);
-     
-
 
     }
-    
-    // console.log("dfs returns=",removed);
+
     return removed;
 
 
 }
-const update_cost = (node, cost, previous, unvisited) => {
-    let found = false;
-    for (let i = 0; i < unvisited.length; i++) {
-        let current = unvisited[i];
-        if (current[0] == node[0] && current[1] == node[1]) {
-            found = true;
-            if (unvisited[2] > cost) {
-                unvisited[2] = cost;
-                unvisited[3] = previous;
-                return unvisited;
-            }
-        }
-    }
-    if (!found) unvisited.push([node[0], node[1], cost, previous]);
-    return unvisited;
-}
-const remove_from_unvisited = (node, unvisited) => {
-
-    for (let i = 0; i < unvisited.length; i++) {
-        let current = unvisited[i];
-        if (current[0] == node[0] && current[1] == node[1]) unvisited.splice(i, 1);
-    }
-    return unvisited;
-}
 
 
 
 
-const contains = (discovered_nodes, node) => {
-    for (let i = 0; i < discovered_nodes.length; i++) {
-        if (discovered_nodes[i][0] === node[0] && discovered_nodes[i][1] === node[1]) {
-            return true;
-        }
-    }
-    return false;
-}
 
-const remove = (list, node) => {
-    for (let i = 0; i < list.length; i++) {
-        if (list[i][0] === node[0] && list[i][1] === node[1]) {
-            return list.splice(i, 1);
-        }
-    }
-}
-const find_lowest_node = (unvisted) => {
-
-    // console.log("find lowest slice=", copy);
-    let min_cost = 10000000;
-    let node;
-    for (let i = 0; i < unvisted.length; i++) {
-        if (unvisted[i][2] < min_cost) {
-            min_cost = unvisted[i][2];
-            node = unvisted[i];
-        }
-
-    }
-    return node;
-}
 

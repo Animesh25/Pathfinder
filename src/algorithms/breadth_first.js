@@ -1,4 +1,4 @@
-import {getFourNeighbours,getEightNeighbours} from './common_methods/methods';
+import {getFourNeighbours,getEightNeighbours,contains} from './common_methods/methods';
 
 
 export const bfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
@@ -26,14 +26,14 @@ export const bfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
     */
 
 
-    //                 -------Node------------ | Cost | Previous
+    
     let removed=[];
     let queue = [[startLoc[0], startLoc[1], 0, null]];
     while (queue.length>0) {
 
         const head = queue[0];
 
-        if (head === undefined) { console.log("head=undefined so break"); break; }
+        if (head === undefined) { break; }
 
         let neighbours;
         if(chosenDirection.indexOf("4")>-1){
@@ -66,8 +66,7 @@ export const bfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
         }
         removed.push(queue.shift());
-        // unvisited = remove_from_unvisited(node_lowest_cost, unvisited);
-     
+
 
 
     }
@@ -80,14 +79,6 @@ export const bfs = (ROWS, COLS, startLoc, endLoc, Grid,chosenDirection) => {
 
 
 
-const contains = (discovered_nodes, node) => {
-    for (let i = 0; i < discovered_nodes.length; i++) {
-        if (discovered_nodes[i][0] === node[0] && discovered_nodes[i][1] === node[1]) {
-            return true;
-        }
-    }
-    return false;
-}
 
 
 
