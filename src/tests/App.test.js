@@ -12,7 +12,7 @@ const a_star = require("../algorithms/a_star_search");
 const dijkstra = require("../algorithms/dijkstra");
 const breadth_first = require("../algorithms/breadth_first");
 const depth_first = require("../algorithms/depth_first");
-const best_first = require("../algorithms/best_first");
+const greedy_best_first = require("../algorithms/greedy_best_first");
 const bidirectional_search = require("../algorithms/bidirectional_search");
 
 
@@ -73,7 +73,7 @@ const runAlgorithm = async (name, startLoc, endLoc, grid, neighbourEval) => {
         result = a_star.a_star_search(ROWS, COLS, startLoc, endLoc, grid, neighbourEval);
     }
     else if (name === "best first") {
-        result = best_first.best_first(ROWS, COLS, startLoc, endLoc, grid, neighbourEval);
+        result = greedy_best_first.greedy_best_first(ROWS, COLS, startLoc, endLoc, grid, neighbourEval);
     }
     else if (name === "dijkstra") {
         result = dijkstra.dijkstra_algorithm(ROWS, COLS, startLoc, endLoc, grid, neighbourEval);

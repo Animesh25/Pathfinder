@@ -1,5 +1,5 @@
 export const algorithmOptions = [
-    'A* Search', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Best-First Search', 'Bidirectional search'
+    'A* Search', 'Dijkstra', 'Depth-First Search', 'Breadth-First Search', 'Greedy Best-First', 'Bidirectional search'
 ];
 export const directionOptions = [
     '4-Directional', '8-Directional'

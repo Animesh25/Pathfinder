@@ -6,7 +6,7 @@ import { a_star_search } from './algorithms/a_star_search';
 import { dijkstra_algorithm } from './algorithms/dijkstra';
 import { bfs } from './algorithms/breadth_first';
 import { dfs } from './algorithms/depth_first';
-import { best_first } from './algorithms/best_first';
+import { greedy_best_first } from './algorithms/greedy_best_first';
 import { bidirectional } from './algorithms/bidirectional_search';
 import { timeout, findPathFromClosed, drawPath, findPathBidirectional, createBombVisit } from './Helpers/path_finder';
 import Dropdown from './Components/Dropdown';
@@ -313,12 +313,12 @@ function App() {
       }
       else closed_nodes = dfs(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     }
-    else if (chosenAlgorithm === "Best-First Search") {
+    else if (chosenAlgorithm === "Greedy Best-First") {
       if (bombLoc.length > 1) {
-        closed_nodes = best_first(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
-        secondHalf = best_first(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
+        closed_nodes = greedy_best_first(ROWS, COLS, startLoc, bombLoc, Grid, chosenDirection);
+        secondHalf = greedy_best_first(ROWS, COLS, bombLoc, endLoc, Grid, chosenDirection);
       }
-      else closed_nodes = best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
+      else closed_nodes = greedy_best_first(ROWS, COLS, startLoc, endLoc, Grid, chosenDirection);
     }
     else if (chosenAlgorithm === "Bidirectional search") {
       await bidirectional_search();

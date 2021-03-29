@@ -2,7 +2,7 @@ import { getFourNeighbours, getEightNeighbours,contains,distanceFromEnd} from '.
 import BinaryHeap from '../Components/binaryHeap';
 
 
-export const best_first = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirection) => {
+export const greedy_best_first = (ROWS, COLS, startLoc, endLoc, Grid, chosenDirection) => {
     let open_nodes = new BinaryHeap();
     open_nodes.add([startLoc[0], startLoc[1], 0, 0, 0])
     let closed_nodes = [];
